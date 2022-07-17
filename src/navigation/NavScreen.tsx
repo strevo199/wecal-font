@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AddGrade, Courseview, Home } from '../screens';
 import { HomeTab } from './Tab';
 import { COLORS } from '../constants/theme';
 import { Activation, Login, Signup } from '../screens/auths';
+import { dataService } from '../services/data.service';
 
 const Stack = createStackNavigator();
 
 export const RegNavScreen = () => {
+
+
+  
+  // useEffect(() => {
+  //   setuser(dataService.loggedInUser())
+    
+  // }, [])
+
+  
   return (
     <NavigationContainer>
         <Stack.Navigator> 
@@ -40,9 +50,11 @@ export const RegNavScreen = () => {
 
 
 export const MainNavScreen = () => { 
+
   return (
     <NavigationContainer>
         <Stack.Navigator>
+                  
            <Stack.Screen 
                options={{headerShown: false}}
             name = "Home" component={HomeTab} />

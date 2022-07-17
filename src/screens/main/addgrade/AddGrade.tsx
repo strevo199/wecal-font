@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { FC, Fragment, useState } from 'react';
+import React, { FC, Fragment, useEffect, useState } from 'react';
 import { Dropdown } from '../../../components/DropSelect';
 import { gradeLabel, seamesterLabel } from '../../../constants/data';
 import { FONTS, SIZES } from '../../../constants';
@@ -8,32 +8,92 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { send } from '../../../constants/icons';
 import { COLORS } from '../../../constants/theme';
 import { ActionButton } from '../../../components';
+import { dataService } from '../../../services/data.service';
+import { httpService } from '../../../services/http.service';
+import Snackbar from 'react-native-snackbar';
 
 
 export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
   const [grade, setgrade] = useState('')
+  const [grades, setgrades] = useState([])
   const [seamester, setSeamester] = useState('')
+  const [seamesters, setSeamesters] = useState([])
   const [courseCode, setcourseCode] = useState('')
+  const [courseUnit, setcourseUnit] = useState('')
   const [courseTitle, setcourseTitle] = useState('')
   const [isLoading, setisLoading] = useState(false)
 
-  const handleSendGrade =() => {
+  const handleSendGrade =async () => {
         setisLoading(true); 
-      // if (grade && seamester && courseCode) {
-        const  body:{grade: string,seamester: string,courseTitle: string,courseCode: string} ={
-            grade,courseCode,courseTitle, seamester
+      if (grade && courseCode && courseUnit) {
+        const  body:{grade: string, semester: string,name: string,code: string,unit: string, school: string, user: string} ={
+            grade: grade,
+            code: courseCode.toUpperCase(),
+            name: courseTitle, 
+            unit: courseUnit,
+            semester: seamester,
+            school: user.school._id,
+            user: user._id
          }
-        //  setTimeout(() => {
-        //   setisLoading(false);
-          navigation.navigate('CourseList',{body})
-        //  }, 3000);
-      // }
-      // else{
-      //   setTimeout(() => {
-      //     setisLoading(false);
-      //    }, 1000);
-      // }
-  }
+         
+
+         
+        try {
+          const path = 'course'
+      const res = await httpService.post(path,body);
+      if (res.data.success) {
+          setisLoading(false)      
+          console.log(res.data.data);
+          
+          Snackbar.show({
+              text: 'Added Successfully',
+              duration: 3000,
+              backgroundColor: COLORS.darkPrimary,
+              textColor: COLORS.white
+          })
+      }
+      } catch (error) {
+          setisLoading(false);
+          console.log(error);
+          
+      }
+         
+  }}
+  
+  const [user, setuser] = useState({})
+
+  
+  useEffect(() => {
+    setuser(dataService.loggedInUser())
+    
+    
+  }, [])
+
+
+  useEffect(() => {
+   if (user) {
+    const items =  user.school?.grade_system.map((item: any) => {
+      return (
+        {
+          label: `grade ${Object.keys(item)[0]}`,
+          value: Object.keys(item)[0]
+        }
+      )
+    })
+    const itemssemater =  user.school?.semester.map((item: any) => {
+      return (
+        {
+          label: `${item} semester`,
+          value: item
+        }
+      )
+    })
+    setgrades(items)
+    setSeamesters(itemssemater)
+   }
+  }, [user])
+  
+
   
   
   return (
@@ -46,10 +106,13 @@ export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
         <TextInputField multiline={false} placeholder={'Enter course title. e.g Quantum Machincs'} style={{borderWidth:0.6}} setValue={setcourseTitle} hint={'Enter Course Title:'} secureTextEntry={false} value={courseTitle}/>
       </View>
       <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
-        <Dropdown placeholderLabel={'select your Grade'} itemList={gradeLabel} getValue={setgrade} hint={'select your Grade e.g B'}/>
+        <TextInputField multiline={false} placeholder={'Enter credit unit'} style={{borderWidth:0.6}} setValue={setcourseUnit} hint={'Enter credit unit'} secureTextEntry={false} value={courseUnit}/>
       </View>
       <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
-        <Dropdown placeholderLabel={'select seamester'} itemList={seamesterLabel} getValue={setSeamester} hint={'select course seamester '}/>
+        <Dropdown placeholderLabel={'select your Grade'} itemList={grades? grades : []} getValue={setgrade} hint={'select your Grade e.g B'}/>
+      </View>
+      <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
+        <Dropdown placeholderLabel={'select seamester'} itemList={seamesters ? seamesters: []} getValue={setSeamester} hint={'select course seamester '}/>
       </View>
       <View style ={{marginHorizontal: SIZES.padding, marginTop: SIZES.padding, alignItems: 'flex-end'}}>
           {

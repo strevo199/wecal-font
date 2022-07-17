@@ -1,8 +1,8 @@
-import { FlatList, ScrollView, TouchableOpacity, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { FlatList, ScrollView, TouchableOpacity, StatusBar, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 import React, { FC, Fragment, useEffect, useState } from 'react'
 import { COLORS, FONTS, SIZES } from '../../../constants/theme';
 import { SearchInputField } from '../../../components';
-import { courseListdata } from '../../../constants/data';
+import { httpService } from '../../../services/http.service';
 
 interface courseItem {
   grade: string;
@@ -15,9 +15,31 @@ interface courseItem {
 
 export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,navigation}) => {
     const [searchCodeValue, setsearchCodeValue] = useState('');
-    const [data, setdata] = useState(courseListdata);
-    
+    const [courses, setcourses] = useState([]);
+    const [isLoading, setisLoading] = useState(false)
 
+    const getCourses =async () => {
+      try {
+        setisLoading(true)      
+        const path = 'course'
+    const res = await httpService.get(path);
+    if (res.data.success) {
+        setisLoading(false)      
+        setcourses(res.data.data);
+        console.log(courses);
+        
+    }
+    } catch (error) {
+        setisLoading(false); 
+        console.log(error);
+        
+    }
+    }
+
+    useEffect( () => {
+     getCourses()
+    }, [])
+    
   
   const displayCourseCard = ({item}:{item:courseItem}) => {
     return ( 
@@ -28,10 +50,10 @@ export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,
           <Text style ={{color: COLORS.primary,...FONTS.h3}}>{item.code}</Text>
         </View>
         <View style ={{flex: 1, marginHorizontal: SIZES.padding}}>
-          <Text style ={{color: COLORS.darkgray,...FONTS.h4, textTransform: 'capitalize'}}>{item.title}</Text>
+          <Text style ={{color: COLORS.darkgray,...FONTS.h4, textTransform: 'capitalize'}}>{item.name}</Text>
         </View>
         <View >
-          <Text style ={{color: COLORS.gray,...FONTS.h4}}>{item.grade}</Text>
+          <Text style ={{color: COLORS.darkPrimary,...FONTS.h3}}>{item.grade}</Text>
         </View>
       </TouchableOpacity> 
     )
@@ -41,9 +63,9 @@ export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,
     return (
       <View style ={{marginHorizontal: SIZES.padding}}>
         <FlatList
-          data={data}
-          keyExtractor = {(item) => `item-${item.id}`}
-          renderItem = {displayCourseCard}
+          data={courses}
+          keyExtractor = {(item) => `item-${item._id}`}
+          renderItem = {displayCourseCard} 
         />
       </View>
     )
@@ -57,7 +79,9 @@ export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,
             <SearchInputField multiline={false} placeholder={'Enter course code'} style={{borderWidth: 0.6}} setValue={setsearchCodeValue} hint={undefined} secureTextEntry={false} value={searchCodeValue}/>
         </View>
         }
-        {renderCourseList()}
+        {isLoading? 
+          <ActivityIndicator size={'large'} color = {COLORS.primary}/>:
+         renderCourseList()}
       </View>
     </Fragment>
   )

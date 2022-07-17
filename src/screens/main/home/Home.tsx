@@ -1,6 +1,6 @@
 import { StatusBar, StyleSheet, SafeAreaView, Text, View, Image, Platform, ImageBackground, FlatList, ScrollView, TouchableOpacity, ImageSourcePropType } from 'react-native'
 import React, { FC, Fragment, useEffect, useState } from 'react'
-import { dataService } from '../../../services'
+import { dataService, httpService } from '../../../services'
 import { FONTS, rec, rec1, rec2 } from '../../../constants'
 import { COLORS, SIZES } from '../../../constants/theme';
 import moment from 'moment';
@@ -8,7 +8,7 @@ import moment from 'moment';
 export const Home:FC <{navigation:any}>= ({navigation}) => {
 
   interface User {
-    first_name: string,
+    full_name: string,
     profile_url: string,
     cgpa: string,
     standing: string,
@@ -16,19 +16,42 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
   }
   
   const [user, setuser] = useState({} as User)
+  const [userSchool, setuserSchool] = useState({} as User)
+  const [isLoading, setisLoading] = useState(false)
 
   
   useEffect(() => {
     setuser(dataService.loggedInUser()) as unknown as User
-    
   }, [])
 
+  const getUserSchool = async () => {
+    try {
+      setisLoading(true)      
+      const path = 'userschool'
+  const res = await httpService.get(path);
+  if (res.data.success) {
+      setisLoading(false)      
+      setuserSchool(res.data.data);
+      
+  } 
+  } catch (error) {
+      setisLoading(false); 
+      console.log(error);
+      
+  }
+  }
+
+  useEffect(() => {
+    getUserSchool();
+  }, [])
+  
+  
 
   const renderAddGrade =() => { 
     return (
       <> 
         <View style = {{backgroundColor: COLORS.lightBlue,marginVertical: SIZES.padding2,padding: SIZES.padding }}>
-          <Text style ={{...FONTS.h3, color: COLORS.gray}}>status: <Text  style ={{...FONTS.h3, paddingHorizontal: SIZES.base,textTransform: 'uppercase',color: COLORS.darkPrimary}}>{user.standing}</Text></Text>
+          <Text style ={{...FONTS.h3, color: COLORS.gray}}>status: <Text  style ={{...FONTS.h3, paddingHorizontal: SIZES.base,textTransform: 'uppercase',color: COLORS.darkPrimary}}>{userSchool?.grade_mark?.class? userSchool?.grade_mark?.class: '***'}</Text></Text>
         </View>
         <View style ={{alignItems: 'flex-end'}}>
           <TouchableOpacity
@@ -77,7 +100,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
       </View> 
       <View>
         <ScrollView showsHorizontalScrollIndicator ={false} style ={{marginVertical: SIZES.padding2}} horizontal>
-          {quickActionCards(count = 3.79, content = "Current GPA",  icon = rec, color= COLORS.white,)}
+          {quickActionCards(count = `${userSchool.totalpoint}`, content = "Total Quanlity Points",  icon = rec, color= COLORS.white,)}
           {quickActionCards(count = 20, content = "Total number of A(s)", icon = rec1, color= COLORS.primary)}
           {quickActionCards(count = 13, content = "Total number of B(s)", icon = rec1, color= COLORS.primary)}
         </ScrollView>
@@ -96,7 +119,6 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
 
   const renderShowCase =() => {
     return (
-      
       <ImageBackground
         source={rec}
         resizeMode ='cover'
@@ -104,11 +126,11 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
         imageStyle={{ borderRadius: SIZES.base,}}
        >
         <View style ={{height:65,width: 65, justifyContent:'center', alignItems:'center', backgroundColor: COLORS.white,borderRadius:35, borderWidth:3,borderColor: COLORS.primary}}>
-          <Text style ={{...FONTS.h2,color: COLORS.darkPrimary}}>{user.user_school?.cgpa}</Text>
+          <Text style ={{...FONTS.h2,color: COLORS.darkPrimary}}>{userSchool?.cgpa}</Text>
         </View>  
         <View style ={{backgroundColor:COLORS.ligthGray, padding:5,borderRadius:10}}>
           <Text style ={{...FONTS.h3,color: COLORS.white}}>Your current CGPA</Text>
-          <Text style ={{...FONTS.body4,color: COLORS.white}}>Last updated - {moment(user.user_school?.updated_at).format("MMM Do YYYY")}</Text>
+          <Text style ={{...FONTS.body4,color: COLORS.white}}>Last updated - {moment(userSchool?.updated_at).format("MMM Do YYYY")}</Text>
         </View>  
       </ImageBackground>
     )
@@ -142,8 +164,8 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
         <ScrollView>
           {renderhomeHeader()}
           {renderShowCase()}
-          {renderSummary()} 
           {renderAddGrade()}
+          {renderSummary()} 
         </ScrollView>
       </SafeAreaView> 
     </Fragment>

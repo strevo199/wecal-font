@@ -8,7 +8,7 @@ import { Splash } from './src/screens/auths';
 
 
 const App = () => {
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState(dataService.authToken())
   const [isLoading, setisLoading] = useState(true)
 
   useEffect(() => {
