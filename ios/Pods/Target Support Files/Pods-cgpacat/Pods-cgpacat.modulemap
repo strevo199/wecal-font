@@ -1,0 +1,6 @@
+module Pods_cgpacat {
+  umbrella header "Pods-cgpacat-umbrella.h"
+
+  export *
+  module * { export * }
+}
