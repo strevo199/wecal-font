@@ -12,7 +12,7 @@ const App = () => {
   const [isLoading, setisLoading] = useState(true)
 
   useEffect(() => {
-    const t: string =  dataService.userloginToken();
+    const t: string =  dataService.authToken();
       
     setToken(t) 
     setTimeout(() => {

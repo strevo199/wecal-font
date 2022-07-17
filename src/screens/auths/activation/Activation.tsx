@@ -27,33 +27,30 @@ export const Activation:FC <ActivationProps>= ({route,navigation}) => {
   const [isLoading, setisLoading] = useState(false)
 
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
-  const {token,user} = route.params
+  const {token,user} = route.params || {}
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
 });
 
   const handleActivaion = async () => {
-    setisLoading(true)
+    // setisLoading(true)
     
     const body = {
       token,
       user
     }
-    console.log('----------wwww-',body);
 
     try {
       const path = 'activation'
   const res = await httpService.post(path,body);
   if (res.data.success) {
-      setisLoading(false)
-      console.log('-----------t------',res.data);
-      
-      // await AsyncStorage.multiSet([
-      //   ['logintoken','alalalala'],
-      //   ['user', JSON.stringify(user)]
-      // ])
-      // RNRestart.Restart()
+      setisLoading(false)      
+      await AsyncStorage.multiSet([
+        ['token', token],
+        ['user', JSON.stringify(res.data.user)]
+      ])
+      RNRestart.Restart()
       Snackbar.show({
           text: res.data.message,
           duration: 3000,

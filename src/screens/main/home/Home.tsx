@@ -3,6 +3,7 @@ import React, { FC, Fragment, useEffect, useState } from 'react'
 import { dataService } from '../../../services'
 import { FONTS, rec, rec1, rec2 } from '../../../constants'
 import { COLORS, SIZES } from '../../../constants/theme';
+import moment from 'moment';
 
 export const Home:FC <{navigation:any}>= ({navigation}) => {
 
@@ -103,11 +104,11 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
         imageStyle={{ borderRadius: SIZES.base,}}
        >
         <View style ={{height:65,width: 65, justifyContent:'center', alignItems:'center', backgroundColor: COLORS.white,borderRadius:35, borderWidth:3,borderColor: COLORS.primary}}>
-          <Text style ={{...FONTS.h2,color: COLORS.darkPrimary}}>{user.cgpa}</Text>
+          <Text style ={{...FONTS.h2,color: COLORS.darkPrimary}}>{user.user_school?.cgpa}</Text>
         </View>  
         <View style ={{backgroundColor:COLORS.ligthGray, padding:5,borderRadius:10}}>
           <Text style ={{...FONTS.h3,color: COLORS.white}}>Your current CGPA</Text>
-          <Text style ={{...FONTS.body4,color: COLORS.white}}>Last updated - sep.10.2021</Text>
+          <Text style ={{...FONTS.body4,color: COLORS.white}}>Last updated - {moment(user.user_school?.updated_at).format("MMM Do YYYY")}</Text>
         </View>  
       </ImageBackground>
     )
@@ -117,7 +118,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
     return (
       <View style ={{marginHorizontal: SIZES.padding, alignItems: 'center', marginTop: Platform.OS =='android' ? SIZES.padding: '', flexDirection: 'row', justifyContent: 'space-between', }}>
         <View>
-          <Text style ={{...FONTS.body3, color: COLORS.darkPrimary}}>Welcome, {user.first_name}</Text>
+          <Text style ={{...FONTS.body3, color: COLORS.darkPrimary}}>Welcome, {user.full_name}</Text>
           <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Your statistic</Text>
         </View>
           <Image

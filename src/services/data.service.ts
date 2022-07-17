@@ -4,7 +4,6 @@ import { isLoading } from './http.service';
 class DataService {
     loggedInData = {};
     storedToken = ''; 
-    loginToken = ''; 
 
     isLoading = false;
  
@@ -27,16 +26,7 @@ class DataService {
             } catch (error) {}
         }
 
-        const getloginToken =async () => {
-            try { 
-                const token = await AsyncStorage.getItem('logintoken')
-                if (token) {
-                    this.loginToken = token;
-                }
-            } catch (error) {}
-        }
         
-        getloginToken()
         getToken();
         getLoggedInUser(); 
     } 
@@ -45,10 +35,7 @@ class DataService {
         
         return this.loggedInData;
     }
-    userloginToken() {
-        
-        return this.loginToken; 
-    }
+
     authToken() {
         
         return this.storedToken;

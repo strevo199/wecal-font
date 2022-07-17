@@ -9,27 +9,29 @@ import Snackbar from "react-native-snackbar";
   
 
   
-  export const handleSignup= async (lastName: string,firstName: string,isLoading: boolean,email: string,password: string,setisLoading: Dispatch<SetStateAction<boolean>>,navigation:any,school_country: string,school_name: string,course_of_study: string, phoneNumber: string) => {
+  export const handleSignup= async (firstName: string, email: string, password: string,setisLoading: Dispatch<SetStateAction<boolean>>,navigation:any, school: string,course_of_study: string, phoneNumber: string) => {
     setisLoading(true)
-    if (password && lastName && firstName && email && school_country && school_name && course_of_study && phoneNumber) {
+    if (password && firstName && email  && school && course_of_study && phoneNumber) {
         const signupData = {
             password: password,
-            last_name: lastName,
             first_name: firstName,
             email,
-            phone:phoneNumber,
-            school_country,
-            school_name,
-            course_of_study,
+            phone: phoneNumber,
+            school: school,
+            course_of_study: course_of_study,
         }
 
+            console.log(signupData);
+            
 
             try {
                 const path = 'account/signup'
             const res = await httpService.post(path,signupData);
             if (res.data.success) {
                 setisLoading(false)
-                await AsyncStorage.setItem('token',res.data.token)
+                console.log(res.data);
+                
+                // await AsyncStorage.setItem('token',res.data.token)
                 Snackbar.show({
                     text: res.data.message,
                     duration: 3000,

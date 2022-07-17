@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native'; 
-import React, {FC, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 
 import LinearGradient from 'react-native-linear-gradient';
 import { img7, profile4 } from '../../../constants/images';
@@ -17,19 +17,49 @@ import { SIZES, COLORS, FONTS } from '../../../constants/theme';
 import { handleSignup } from './Signup.logic';
 import { rec1 } from '../../../constants/icons';
 import PhoneInput from 'react-native-phone-number-input';
+import { Dropdown } from '../../../components/DropSelect';
+import { httpService } from '../../../services/http.service';
+import { Item } from 'react-native-picker-select';
 export const Signup:FC <{navigation: any}>= ({navigation}) => {
 
-  const [lastName, setLastName] = useState('')
   const [firstName, setFirstName] = useState('')
   const [isLoading, setisLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [course_of_study, setcourseOfStudy] = useState('')
-  const [school_name, setSchoolName] = useState('')
-  const [school_country, setSchoolCountry] = useState('')
+  const [school, setSchoolName] = useState('')
+  const [schools, setSchoolNames] = useState('')
   const [password, setPassword] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const phoneInput = useRef<PhoneInput>(null)
-  
+
+   const getSchool = async () => {
+        
+    try {
+        const path = 'school';
+        const res = await httpService.get(path)
+        if (res.data.success) {
+           const items = res.data.data.map((item:any) => {
+                return (
+                   { label: item.name, 
+                    value: item._id    
+                }
+                )
+            })
+            setSchoolNames(items)
+        }
+    } catch (error) {
+        console.log(error);
+        
+    }
+           
+        
+    }
+
+    useEffect(() => {
+        getSchool()
+    }, [])
+    
+    
 
   return (
     <ScrollView style={{
@@ -81,15 +111,9 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
               hint={'enter your fullname'} 
                secureTextEntry={false} value={firstName}/>
           </View>
-          {/* <View>
-          <TextInputField multiline={false} 
-                placeholder={'Enter Last Name'} style={{
-                borderColor: COLORS.primary,
-                borderWidth: 2,
-                backgroundColor: COLORS.white,
-              }} setValue={setLastName} hint={undefined}
-               secureTextEntry={false} value={lastName}/>
-          </View> */}
+          <View>
+              <Dropdown itemList={schools} getValue= {setSchoolName} placeholderLabel= {'Select your school'} hint={''}/>
+          </View>
           {/* emial */} 
           
           <View>
@@ -169,7 +193,7 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
             style={{
               marginTop: SIZES.base,
             }}>
-              <ActionButton title={isLoading? <ActivityIndicator color={COLORS.white}/> :'Agree and continue'} handleAction={() =>handleSignup(lastName,firstName,isLoading,email,password,setisLoading,navigation,school_country,school_name,course_of_study,phoneNumber)} style={{backgroundColor: COLORS.primary}}/>
+              <ActionButton title={isLoading? <ActivityIndicator color={COLORS.white}/> :'Agree and continue'} handleAction={() =>handleSignup(firstName,email,password,setisLoading,navigation,school,course_of_study,phoneNumber)} style={{backgroundColor: COLORS.primary}}/>
           </View>
           
 
