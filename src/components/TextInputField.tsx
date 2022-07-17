@@ -17,7 +17,7 @@ export const TextInputField:React.FC <{multiline:boolean, placeholder:string,sty
                 onFocus ={() => setisFoucs(true)}
                 style ={[isFoucs? {borderColor: COLORS.primary,borderWidth: 2}:{borderColor: COLORS.darkgray} ,{...FONTS.body3,backgroundColor: COLORS.white, borderRadius: SIZES.base, padding: SIZES.padding2+2, borderWidth: 1.2},style]}
             />
-            <Text style ={{color: COLORS.gray, marginLeft:SIZES.padding,}}>{hint}</Text>
+            <Text style ={{color: COLORS.gray, marginLeft:SIZES.padding,marginBottom:SIZES.base}}>{hint}</Text>
         </View>
   )
 }

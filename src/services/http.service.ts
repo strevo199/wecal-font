@@ -3,6 +3,7 @@ import Snackbar from "react-native-snackbar";
 import { dataService } from "./data.service";
 import { COLORS } from '../constants/theme';
 const rootUrl = 'http://localhost:5000/';
+// const rootUrl = 'https://we-cal-be.herokuapp.com/';
 const api = 'api/v1'
 
 export const baseUrl = rootUrl+api;

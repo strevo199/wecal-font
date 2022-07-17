@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/mac/Desktop/reactNativePro/cgpacat/client/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w480dp-port-v13/values-w480dp-port-v13.xml",
+            "outputFile": "/Users/mac/Desktop/reactNativePro/cgpacat/wecal/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w480dp-port-v13/values-w480dp-port-v13.xml",
             "map": [
                 {
                     "source": "/Users/mac/.gradle/caches/transforms-3/10d56dc05e97ac2f55b989317a070bfc/transformed/material-1.1.0/res/values-w480dp-port-v13/values-w480dp-port-v13.xml",

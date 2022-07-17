@@ -12,11 +12,11 @@ export const RegNavScreen = () => {
   return (
     <NavigationContainer>
         <Stack.Navigator> 
-             {/* <Stack.Screen
+             <Stack.Screen
             
             name = "Login" 
             options={{headerShown: false}}
-            component={Login} /> */}
+            component={Login} />
             <Stack.Screen 
             name = "Signup" 
             options={{headerShown: false}}
