@@ -126,16 +126,6 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
               hint={'enter your email'} 
                secureTextEntry={false} value={email}/>
           </View>
-          {/* <View> 
-          <TextInputField multiline={false} 
-                placeholder={'Enter school name'} style={{
-                borderColor: COLORS.primary,
-                borderWidth: 2,
-                backgroundColor: COLORS.white,
-              }} setValue={setSchoolName} hint={undefined}
-               secureTextEntry={false} value={school_name}/>
-          </View> */}
- 
           <View>
           <TextInputField multiline={false} 
                 placeholder={'e.g Physics'} style={{
@@ -146,17 +136,6 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
               hint={'enter course of study'} 
                secureTextEntry={false} value={course_of_study}/>
           </View>
-
-          {/* <View>
-          <TextInputField multiline={false} 
-                placeholder={'Enter school country name'} style={{
-                borderColor: COLORS.primary,
-                borderWidth: 2,
-                backgroundColor: COLORS.white,
-              }} setValue={setSchoolCountry} hint={undefined}
-               secureTextEntry={false} value={school_country}/>
-          </View> */}
-          {/* password */}
 
           <View>
           <TextInputField multiline={false} 

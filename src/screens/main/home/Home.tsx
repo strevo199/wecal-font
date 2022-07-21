@@ -1,9 +1,11 @@
-import { StatusBar, StyleSheet, SafeAreaView, Text, View, Image, Platform, ImageBackground, FlatList, ScrollView, TouchableOpacity, ImageSourcePropType } from 'react-native'
+import { StatusBar, StyleSheet, SafeAreaView, Text, View, Image, Platform, ImageBackground, FlatList, ScrollView, TouchableOpacity, ImageSourcePropType, RefreshControl } from 'react-native'
 import React, { FC, Fragment, useEffect, useState } from 'react'
 import { dataService, httpService } from '../../../services'
 import { FONTS, rec, rec1, rec2 } from '../../../constants'
 import { COLORS, SIZES } from '../../../constants/theme';
 import moment from 'moment';
+import { Splash } from '../../auths';
+import { useIsFocused } from '@react-navigation/native';
 
 export const Home:FC <{navigation:any}>= ({navigation}) => {
 
@@ -18,11 +20,21 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
   const [user, setuser] = useState({} as User)
   const [userSchool, setuserSchool] = useState({} as User)
   const [isLoading, setisLoading] = useState(false)
+  const isFocused = useIsFocused();
 
+  const [refreshing, setRefreshing] = useState(false);
   
   useEffect(() => {
     setuser(dataService.loggedInUser()) as unknown as User
   }, [])
+  const wait = (timeout: number | undefined) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getUserSchool()
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   const getUserSchool = async () => {
     try {
@@ -41,18 +53,36 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
   }
   }
 
+  console.log('user-------------',user);
   useEffect(() => {
+    
     getUserSchool();
-  }, [])
+  }, [isFocused])
   
-  
+  const handleGradeFilter =async (evn: string) => {
+  //   try {
+  //     setisLoading(true)      
+  //     const path = `course/course/grades?grade=${evn}`
+      
+  // const res = await httpService.get(path);
+  // if (res.data.success) {
+  //     setisLoading(false)      
+  //     navigation.navigate("CourseList",{courses:res.data.data})
+      
+  // } 
+  // } catch (error) {
+  //     setisLoading(false); 
+  //     console.log(error);
+      
+  // }
+  }
 
   const renderAddGrade =() => { 
     return (
       <> 
-        <View style = {{backgroundColor: COLORS.lightBlue,marginVertical: SIZES.padding2,padding: SIZES.padding }}>
-          <Text style ={{...FONTS.h3, color: COLORS.gray}}>status: <Text  style ={{...FONTS.h3, paddingHorizontal: SIZES.base,textTransform: 'uppercase',color: COLORS.darkPrimary}}>{userSchool?.grade_mark?.class? userSchool?.grade_mark?.class: '***'}</Text></Text>
-        </View>
+       { userSchool.totalunit > 10 && <View  style = {{backgroundColor: COLORS.lightBlue,marginVertical: SIZES.padding2,padding: SIZES.padding }}>
+          <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Status: <Text  style ={{...FONTS.h3, paddingHorizontal: SIZES.base,textTransform: 'uppercase',color: COLORS.gray}}>{userSchool?.grade_mark?.class? userSchool?.grade_mark?.class: '***'}</Text></Text>
+        </View>}
         <View style ={{alignItems: 'flex-end'}}>
           <TouchableOpacity
             onPress={() => navigation.navigate("AddGrade")}
@@ -66,9 +96,11 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
   }
   
 
-  const quickActionCards  = (count: number, content: string, icon: ImageSourcePropType | undefined,color: string) => {
+  const quickActionCards  = (count: number, content: string, icon: ImageSourcePropType | undefined,color: string, index: any) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => handleGradeFilter(content)}
+      key = {`item-${index}`}>
       <ImageBackground
         source={icon} 
         resizeMode ='cover'
@@ -83,7 +115,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
         }} 
       >
           <View style ={{padding: SIZES.padding}}>
-            <Text style= {{...FONTS.h3, color: color}}>{content}</Text>
+            <Text style= {{...FONTS.h3, color: color}}>Total number of {content}</Text>
             <Text style= {{...FONTS.h1, color: color}}>{count}</Text>
           </View>
       </ImageBackground> 
@@ -92,6 +124,8 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
   }   
 
   const renderSummary =() => { 
+
+
     return (
     <View>
       <View style ={{marginHorizontal: SIZES.padding,justifyContent:'space-between', flexDirection:'row',alignItems: 'center'}}>
@@ -101,15 +135,14 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
       <View>
         <ScrollView showsHorizontalScrollIndicator ={false} style ={{marginVertical: SIZES.padding2}} horizontal>
           {quickActionCards(count = `${userSchool.totalpoint}`, content = "Total Quanlity Points",  icon = rec, color= COLORS.white,)}
-          {quickActionCards(count = 20, content = "Total number of A(s)", icon = rec1, color= COLORS.primary)}
-          {quickActionCards(count = 13, content = "Total number of B(s)", icon = rec1, color= COLORS.primary)}
+          {quickActionCards(count = `${userSchool.totalunit}`, content = "Total Units", icon = rec1, color= COLORS.primary)}
         </ScrollView>
-        <ScrollView showsHorizontalScrollIndicator ={false} horizontal>
-         {quickActionCards(count = 10, content = "Total number of C(s)", icon = rec2, color= COLORS.primary)}
-          {quickActionCards(count = 2, content = "Total number of D(s)", icon = rec2, color= COLORS.primary)}
-          {quickActionCards(count = 5, content = "Total number of E(s)", icon = rec2, color= COLORS.primary)}
-          {quickActionCards(count = 0, content = "Total number of F(s)", icon = rec1, color= COLORS.primary)}
-
+        <ScrollView showsHorizontalScrollIndicator ={false}  horizontal>
+          { 
+            userSchool.gradecounts && userSchool?.gradecounts.map((item: { markCount: any; mark: any; }, index: any) => {
+              return quickActionCards(count = item.markCount, content = item.mark, icon = rec2, color= COLORS.primary, index = index)
+            })
+          }
         </ScrollView>
       </View>
     </View>
@@ -126,7 +159,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
         imageStyle={{ borderRadius: SIZES.base,}}
        >
         <View style ={{height:65,width: 65, justifyContent:'center', alignItems:'center', backgroundColor: COLORS.white,borderRadius:35, borderWidth:3,borderColor: COLORS.primary}}>
-          <Text style ={{...FONTS.h2,color: COLORS.darkPrimary}}>{userSchool?.cgpa}</Text>
+          <Text style ={{...FONTS.h2,color: COLORS.darkPrimary}}>{userSchool?.cgpa < 1 ? "": userSchool?.cgpa}</Text>
         </View>  
         <View style ={{backgroundColor:COLORS.ligthGray, padding:5,borderRadius:10}}>
           <Text style ={{...FONTS.h3,color: COLORS.white}}>Your current CGPA</Text>
@@ -159,15 +192,22 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
 
   return (
     <Fragment>
-      <StatusBar backgroundColor={COLORS.primary} barStyle={ Platform.OS === 'android'? 'light-content': 'dark-content'} />
-      <SafeAreaView> 
-        <ScrollView>
-          {renderhomeHeader()}
-          {renderShowCase()}
-          {renderAddGrade()}
-          {renderSummary()} 
-        </ScrollView>
-      </SafeAreaView> 
+          <StatusBar backgroundColor={COLORS.primary} barStyle={ Platform.OS === 'android'? 'light-content': 'dark-content'} />
+          <SafeAreaView>
+              {renderhomeHeader()}
+            <ScrollView
+                refreshControl={
+                  <RefreshControl
+                      refreshing ={refreshing}
+                      onRefresh ={onRefresh}
+                  />
+                }
+            >
+              {renderShowCase()}
+              {renderAddGrade()}
+              {renderSummary()} 
+            </ScrollView>
+          </SafeAreaView> 
     </Fragment>
   )
 }

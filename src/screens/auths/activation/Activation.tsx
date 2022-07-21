@@ -59,9 +59,7 @@ export const Activation:FC <ActivationProps>= ({route,navigation}) => {
       })
   }
   } catch (error) {
-      setisLoading(false);
-      console.log(error);
-      
+      setisLoading(false);      
   }
      
   }

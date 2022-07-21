@@ -77,11 +77,13 @@ export const HomeTab = () => {
         <Tab.Screen
             options={{ 
               headerShown: false,
-              title: 'Home'
+              title: 'Home',
+              unmountOnBlur: true
            }}
           component={Home} name='MainHome' />
         <Tab.Screen 
             options={{ 
+                  // unmountOnBlur: true,
                   title: 'Course List',
                   headerTitleStyle: {
                       color:COLORS.white},
@@ -97,7 +99,7 @@ export const HomeTab = () => {
                 }
             }}
         name='CourseList'>{(props) => <CourseList {...props} toggleSearch ={toggleSearch}/>}</Tab.Screen>
-        <Tab.Screen component={Profile} name='Profile' />
+        <Tab.Screen options={{unmountOnBlur: true}} component={Profile} name='Profile' />
     </Tab.Navigator>
   )
 }

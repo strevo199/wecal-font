@@ -3,27 +3,38 @@ import { SetStateAction } from "react";
 import { user } from "../../../constants";
 import { dataService } from '../../../services/data.service';
 import RNRestart from 'react-native-restart';
+import { httpService } from '../../../services/http.service';
 
-
-export const handleEmailExist = (email: string,setemailExist: { (value: SetStateAction<boolean>): void; (arg0: boolean): void; }) => {
-     console.log("handleEmailExist---------",email);
-    if (email) {
-      setemailExist(true); 
-    }  
-  }
   
-  export const handleLogin = async (password: string) => {
-    console.log('dataService.authToken()--------',dataService.authToken());
-    await AsyncStorage.multiSet([
-      ['token','alalalala'],
-      ['user', JSON.stringify(user)]
-    ])
-    RNRestart.Restart()
-  }
-  export const handleClearEmail = (setEmail: { (value: SetStateAction<string>): void; (arg0: string): void; },setemailExist: { (value: SetStateAction<boolean>): void; (arg0: boolean): void; }) => {
-    setEmail('')
-    setemailExist(false);
+  export const handleLogin = async (email: string ,password: string, setIsLoading: any) => {
 
+    if (email && password) {
+      const body = {
+        email: email,
+        password: password
+      }
+      const path = 'account/login'
+      try {
+        setIsLoading(true)
+      const res = await  httpService.post(path, body)
+        if (res.data.success) {
+          setIsLoading(false)
+      await AsyncStorage.multiSet([
+      ['token', res.data.token],
+      ['user', JSON.stringify(res.data.user)]
+      ])
+      RNRestart.Restart()
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      
+    } else {
+      setIsLoading(false)
+    }
+
+    
   }
 
 

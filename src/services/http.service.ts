@@ -4,7 +4,7 @@ import { dataService } from "./data.service";
 import { COLORS } from '../constants/theme';
 const rootUrl = 'http://localhost:5000/';
 // const rootUrl = 'https://we-cal-be.herokuapp.com/';
-const api = 'api/v1'
+const api = 'api/v1';
 
 export const baseUrl = rootUrl+api;
 
@@ -12,8 +12,8 @@ const token = dataService.authToken();
 
 export const isLoading:boolean = false ; 
 export const httpService = axios.create({
-    baseURL:baseUrl,
-    timeout: 10000,
+    baseURL:baseUrl, 
+    timeout: 10000, 
     withCredentials: true,
     headers: {
         Authorization: `Bearer ${token}`,

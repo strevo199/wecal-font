@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import React, {FC, Fragment, useState} from 'react';
 import {
@@ -16,13 +17,13 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import { img7, profile4 } from '../../../constants/images';
 import { ActionButton, ParagraphText, TextInputField } from '../../../components';
-import { handleClearEmail, handleEmailExist, handleLogin } from './Login.logic';
+import { handleLogin } from './Login.logic';
 
 export const Login:FC <{navigation: any}>= ({navigation}) => {
 
-  const [emailExist, setemailExist] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
  
 
@@ -50,7 +51,7 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
             marginLeft: SIZES.padding * 2,
           }}>
           <ParagraphText
-            message= {emailExist ? 'Log in': 'Hi!'}
+            message= {'Log in'}
             style={{color: COLORS.white, ...FONTS.largeTitle}}
           />
         </View>
@@ -63,36 +64,10 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
             marginHorizontal: SIZES.padding,
             marginVertical: SIZES.h1,
           }}>
-          {/*  */} 
-          { emailExist && <View
-            style={{
-              flexDirection: 'row',
-              marginVertical: SIZES.base,
-            }}>
-            <Image
-              source={img7}
-              resizeMode="contain"
-              style={{
-                width: 50,
-                borderRadius: 25,
-                height: 50,
-                marginRight: 15,
-              }}
-            />
-            <View>
-              <ParagraphText
-                message={'Stephen Isaac'}
-                style={{color: COLORS.white, ...FONTS.body2}}
-              />
-              <ParagraphText
-                style={{color: COLORS.white, ...FONTS.body3}}
-                message={'stephenisaac@gmail.com'}
-              />
-            </View> 
-          </View>}
+
           {/* emial */} 
           
-          {!emailExist && <View>
+          <View>
             <TextInputField multiline={false} 
                 placeholder={'Enter Email'} style={{
                 borderColor: COLORS.primary,
@@ -100,10 +75,10 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
                 backgroundColor: COLORS.white,
               }} setValue={setEmail} hint={undefined}
                secureTextEntry={false} value={email}/>
-          </View>}
+          </View>
           {/* password */}
 
-          {emailExist && <View>
+          <View>
             <TextInputField multiline={false} 
             placeholder={'enter your password'} 
             style={{
@@ -116,25 +91,14 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
             secureTextEntry={true}
             
             value={password}/>
-          </View>}
+          </View>
           <View
             style={{
               marginTop: SIZES.base,  
               flexDirection: 'row',
-              justifyContent: 'space-between' 
+              justifyContent: 'flex-end'
             }}>
-              {
-                emailExist ? 
-                <ActionButton title={'back'} handleAction={() =>handleClearEmail(setEmail,setemailExist)} style={{backgroundColor: COLORS.darkPrimary,width: SIZES.width/4}}/>
-                :
-                <ActionButton title={''} handleAction={undefined} style={undefined}/>
-
-              }
-              <ActionButton title={'Continue'} handleAction={!emailExist ? () =>handleEmailExist(email,setemailExist) : () =>handleLogin(password)} style={{backgroundColor: COLORS.primary, width: SIZES.width/4}}/>
-          </View>
- 
-          <View style={{alignItems: 'center', marginVertical: SIZES.base}}>
-            <ParagraphText style={{color: COLORS.white}} message={'or'} />
+              <ActionButton  title={isLoading? <ActivityIndicator color={COLORS.white}/> :'Login'}  handleAction={() =>handleLogin(email,password, setIsLoading)} style={{backgroundColor: COLORS.primary, width: SIZES.width/4}}/>
           </View>
 
           <View style ={{flexDirection: 'row', marginVertical: SIZES.padding}}>

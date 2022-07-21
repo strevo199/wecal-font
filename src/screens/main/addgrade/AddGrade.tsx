@@ -51,6 +51,7 @@ export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
               backgroundColor: COLORS.darkPrimary,
               textColor: COLORS.white
           })
+          navigation.navigate("Home")
       }
       } catch (error) {
           setisLoading(false);

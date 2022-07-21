@@ -5,7 +5,6 @@ import { AddGrade, Courseview, Home } from '../screens';
 import { HomeTab } from './Tab';
 import { COLORS } from '../constants/theme';
 import { Activation, Login, Signup } from '../screens/auths';
-import { dataService } from '../services/data.service';
 
 const Stack = createStackNavigator();
 
@@ -13,12 +12,7 @@ export const RegNavScreen = () => {
 
 
   
-  // useEffect(() => {
-  //   setuser(dataService.loggedInUser())
-    
-  // }, [])
 
-  
   return (
     <NavigationContainer>
         <Stack.Navigator> 
@@ -44,7 +38,7 @@ export const RegNavScreen = () => {
             }}
             component={Activation} />
         </Stack.Navigator>
-    </NavigationContainer>
+    </NavigationContainer> 
   )
 }
 

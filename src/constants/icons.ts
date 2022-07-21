@@ -29,3 +29,5 @@ export const rec1 = require('../../assets/icons/rec1.png');
 export const rec2 = require('../../assets/icons/rec2.png');
 export const home = require('../../assets/icons/home.png');
 export const send = require('../../assets/icons/send.png');
+export const edit = require('../../assets/icons/edit.png');
+export const trash = require('../../assets/icons/trash.png');
