@@ -12,6 +12,7 @@ import React, {FC, Fragment, useState} from 'react';
 import {
   COLORS,
   FONTS,
+  rec1,
   SIZES,
 } from '../../../constants';
 import LinearGradient from 'react-native-linear-gradient';
@@ -32,7 +33,7 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
 
     <StatusBar barStyle={'light-content'}/>
     <ImageBackground
-      source={profile4}
+      source={rec1}
       resizeMode="cover"
       imageStyle ={{
         opacity:0.8
@@ -44,15 +45,25 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
       <SafeAreaView
         style={{
           flex: 1,
-          justifyContent: 'center',
+          // justifyContent: 'center',
         }}>
+        <View
+          style={{
+            alignItems: 'center',
+            marginBottom:SIZES.largeTitle*2
+          }}>
+          <ParagraphText
+            message= {'Wecal'}
+            style={{color: COLORS.lightBlue, ...FONTS.largeTitle}}
+          />
+        </View>
         <View
           style={{
             marginLeft: SIZES.padding * 2,
           }}>
           <ParagraphText
             message= {'Log in'}
-            style={{color: COLORS.white, ...FONTS.largeTitle}}
+            style={{color: COLORS.darkPrimary, ...FONTS.largeTitle}}
           />
         </View>
         <View
@@ -87,7 +98,7 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
               backgroundColor: COLORS.white,
             }}
             setValue={setPassword} 
-            hint={'enter your password'}  
+            hint={''}  
             secureTextEntry={true}
             
             value={password}/>

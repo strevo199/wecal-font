@@ -16,10 +16,10 @@ export const Dropdown:FC <{itemList: any, getValue: (a:string) => void, placehol
                 items={itemList}
                 placeholder={{
                     label: placeholderLabel,
-                    color:COLORS.gray
+                    color:COLORS.primary
                 }}
                 
-            />
+            /> 
         </View>
             <Text style ={{...FONTS.body5, color: COLORS.gray}}>{hint}</Text>
         </>
@@ -29,8 +29,8 @@ export const Dropdown:FC <{itemList: any, getValue: (a:string) => void, placehol
 
 const styles = StyleSheet.create({
     pickerSelectStyles: {
-        borderWidth: 0.7,
-        borderColor: COLORS.gray,
+        borderWidth: 1.5,
+        borderColor: COLORS.darkPrimary,
         paddingLeft:SIZES.padding,
         borderRadius: SIZES.padding,
         backgroundColor:COLORS.white,

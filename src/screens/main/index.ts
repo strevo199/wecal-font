@@ -4,3 +4,4 @@ export * from './courseList';
 export * from './addgrade';
 export * from './addgrade';
 export * from './courseview'; 
+export * from './gradecourse'

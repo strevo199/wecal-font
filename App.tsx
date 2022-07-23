@@ -17,9 +17,9 @@ const App = () => {
     setToken(t) 
     setTimeout(() => {
       setisLoading(false)
-    }, 2000);
+    }, 3000);
     
-  }, [isLoading])
+  }, [isLoading,token]) 
 
   if (isLoading) {
     return ( 

@@ -5,7 +5,7 @@ import { dataService } from '../../../services/data.service';
 import RNRestart from 'react-native-restart';
 import { httpService } from '../../../services/http.service';
 
-  
+
   export const handleLogin = async (email: string ,password: string, setIsLoading: any) => {
 
     if (email && password) {
@@ -26,41 +26,14 @@ import { httpService } from '../../../services/http.service';
       RNRestart.Restart()
         }
       } catch (error) {
+        setIsLoading(false)
         console.log(error);
       }
 
-      
+
     } else {
       setIsLoading(false)
     }
 
-    
+
   }
-
-
-//   const handleLogin = async () => {
-//     setLoading(true);
-//     try {
-//       const path = 'auth/login';
-//       const res = await httpService.post(path, loginData);
-//       const cb = () => {
-//         console.log('data stored');
-//       };
-//       if (res) {
-//         setLoading(false);
-
-//         navigation.navigate('Dashboard');
-//         // await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
-//         await AsyncStorage.multiSet([
-//           ['token', res.data.accesstoken],
-//           ['user', JSON.stringify(res.data.user)],
-//           cb,
-//         ]);
-//         ToastAndroid.show('Welcome', ToastAndroid.LONG);
-//       } else {
-//         setLoading(false);
-//       }
-//     } catch (error) {
-//       setLoading(false);
-//     }
-//   };

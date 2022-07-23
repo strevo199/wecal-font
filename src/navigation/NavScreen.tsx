@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AddGrade, Courseview, Home } from '../screens';
+import { AddGrade, Courseview, GradeCourse, Home } from '../screens';
 import { HomeTab } from './Tab';
 import { COLORS } from '../constants/theme';
 import { Activation, Login, Signup } from '../screens/auths';
@@ -78,6 +78,19 @@ export const MainNavScreen = () => {
                   }
                }}
             name = "Courseview" component={Courseview}/>
+            <Stack.Screen  
+              options={{
+                headerStyle: {
+                  backgroundColor: COLORS.primary,
+                },
+                headerBackTitle: ' ',
+                headerTintColor: COLORS.white,
+                headerTitle: 'Course List ',
+                headerTitleStyle: {
+                  color: COLORS.white
+                }
+             }}
+            name = "GradeCourse" component={GradeCourse}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

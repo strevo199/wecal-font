@@ -170,7 +170,7 @@ export const Courseview:FC <CourseviewProps> = ({route,navigation}) => {
             
             <View style ={{borderWidth:0.7, padding: SIZES.padding, borderColor: COLORS.ligthGray, borderRadius: SIZES.padding ,marginHorizontal: SIZES.padding, marginVertical: SIZES.padding2, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}}>
                 <View>
-                    <Text style ={{...FONTS.h3, color: COLORS.darkPrimary}}>Status: <Text style ={{...FONTS.h3, letterSpacing: 0.9}}>{courseDetail.status} </Text></Text>
+                    <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Status: <Text style ={{...FONTS.h3, letterSpacing: 0.9}}>{courseDetail.status} </Text></Text>
                 </View>
             </View>
             <View style ={{borderWidth:0.7, padding: SIZES.padding, borderColor: COLORS.ligthGray, borderRadius: SIZES.padding ,marginHorizontal: SIZES.padding, marginVertical: SIZES.padding2, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}}>
@@ -180,7 +180,7 @@ export const Courseview:FC <CourseviewProps> = ({route,navigation}) => {
                 <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Date added: <Text style ={{...FONTS.h3}}>{moment(courseDetail?.created_at).format("MMM-Do-YYYY")}</Text></Text>
                 <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Date updated: <Text style ={{...FONTS.h3}}>{moment(courseDetail?.updated_at).format("MMM-Do-YYYY")}</Text></Text>
             </View>
-            <View style ={{backgroundColor: COLORS.ligthGray, height:SIZES.largeTitle, width: SIZES.largeTitle, justifyContent: 'center', alignItems: 'center', borderRadius: SIZES.base }}>
+            <View style ={{backgroundColor: COLORS.ligthGray, height:SIZES.largeTitle*1.5, width: SIZES.largeTitle* 1.5, justifyContent: 'center', alignItems: 'center', borderRadius: SIZES.base }}>
                 <Text style ={{...FONTS.largeTitle, color:COLORS.primary}}>{courseDetail.grade}</Text>
             </View>
         </View>

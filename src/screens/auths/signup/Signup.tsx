@@ -7,7 +7,7 @@ import {
   View,
   ActivityIndicator,
   ScrollView,
-} from 'react-native'; 
+} from 'react-native';
 import React, {FC, useEffect, useRef, useState} from 'react';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -33,15 +33,16 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
   const phoneInput = useRef<PhoneInput>(null)
 
    const getSchool = async () => {
-        
+
     try {
         const path = 'school';
         const res = await httpService.get(path)
         if (res.data.success) {
+            console.log(res.data.data)
            const items = res.data.data.map((item:any) => {
                 return (
-                   { label: item.name, 
-                    value: item._id    
+                   { label: item.name,
+                    value: item._id
                 }
                 )
             })
@@ -49,17 +50,17 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
         }
     } catch (error) {
         console.log(error);
-        
+
     }
-           
-        
+
+
     }
 
     useEffect(() => {
         getSchool()
     }, [])
-    
-    
+
+
 
   return (
     <ScrollView style={{
@@ -74,21 +75,21 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
       style={{
         flex: 1,
       }}>
-        
+
 
       <SafeAreaView
         style={{
           flex: 1,
         }}>
-        <View 
+        <View
           style={{
             marginLeft: SIZES.padding * 2,
-          }}> 
+          }}>
           <ParagraphText
             message= {'Sign up'}
             style={{color: COLORS.darkPrimary, ...FONTS.largeTitle}}
           />
-        </View> 
+        </View>
         <View
           style={{
             // backgroundColor: COLORS.transparentBlack,
@@ -98,86 +99,86 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
             marginHorizontal: SIZES.padding,
             marginVertical: SIZES.padding * 2,
           }}>
-          
-          {/* emial */} 
-          
+
+          {/* emial */}
+
           <View>
-          <TextInputField multiline={false} 
+          <TextInputField multiline={false}
                 placeholder={'Steve Example'} style={{
                 borderColor: COLORS.primary,
                 borderWidth: 2,
                 backgroundColor: COLORS.white,
               }} setValue={setFirstName}
-              hint={'enter your fullname'} 
+              hint={'enter your fullname'}
                secureTextEntry={false} value={firstName}/>
           </View>
+                <View style ={{marginVertical: SIZES.padding}}>
+              <PhoneInput
+                  ref={phoneInput}
+                  defaultCode="NG"
+                  // defaultValue= {regData?.phone_number}
+                  onChangeCountry ={(e) => console.log(e)}
+                  layout = "first"
+                  textInputStyle = {{color: COLORS.darkgray}}
+                  textContainerStyle ={{height:"100%"}}
+                  codeTextStyle ={{display:'none'}}
+                  onChangeFormattedText={(text) => {
+                    setPhoneNumber(text); 
+                  }}
+                  containerStyle ={{width:'100%',borderColor:COLORS.gray, borderWidth:1, borderRadius:4, backgroundColor: COLORS.white,}}
+                  placeholder = {"Enter your phone number"}
+                />
+            </View>
+          {/* emial */}
+
           <View>
-              <Dropdown itemList={schools} getValue= {setSchoolName} placeholderLabel= {'Select your school'} hint={''}/>
-          </View>
-          {/* emial */} 
-          
-          <View>
-          <TextInputField multiline={false}  
+          <TextInputField multiline={false}
                 placeholder={'e.g example@gmail.com'} style={{
-                borderColor: COLORS.primary,
+                  borderColor: COLORS.primary,
                 borderWidth: 2,
                 backgroundColor: COLORS.white,
-              }} setValue={setEmail} 
-              hint={'enter your email'} 
+              }} setValue={setEmail}
+              hint={'enter your email'}
                secureTextEntry={false} value={email}/>
           </View>
           <View>
-          <TextInputField multiline={false} 
+          <TextInputField multiline={false}
                 placeholder={'e.g Physics'} style={{
-                borderColor: COLORS.primary,
-                borderWidth: 2,
-                backgroundColor: COLORS.white,
-              }} setValue={setcourseOfStudy} 
-              hint={'enter course of study'} 
+                  borderColor: COLORS.primary,
+                  borderWidth: 2,
+                  backgroundColor: COLORS.white,
+                }} setValue={setcourseOfStudy}
+              hint={'enter course of study'}
                secureTextEntry={false} value={course_of_study}/>
+          </View>
+          <View style ={{marginVertical: SIZES.padding}}>
+              <Dropdown itemList={schools} getValue= {setSchoolName} placeholderLabel= {'Select your school'} hint={'Select your school'}/>
           </View>
 
           <View>
-          <TextInputField multiline={false} 
-            placeholder={'***********'} 
+          <TextInputField multiline={false}
+            placeholder={'***********'}
             style={{
               borderColor: COLORS.primary,
               borderWidth: 2,
               backgroundColor: COLORS.white,
             }}
-            setValue={setPassword} 
-            hint={'enter your password'} 
+            setValue={setPassword}
+            hint={'enter your password'}
             secureTextEntry={true}
-            
+
             value={password}/>
           </View>
-          <View style ={{marginTop: SIZES.padding}}>
-        <PhoneInput
-            ref={phoneInput}
-            defaultCode="NG"
-            // defaultValue= {regData?.phone_number}
-            onChangeCountry ={(e) => console.log(e)}
-            layout = "first" 
-            textInputStyle = {{color: COLORS.darkgray}}
-            textContainerStyle ={{height:"100%"}}
-            codeTextStyle ={{display:'none'}}
-            onChangeFormattedText={(text) => {
-              setPhoneNumber(text);
-            }}
-            containerStyle ={{width:'100%',borderColor:COLORS.gray, borderWidth:1, borderRadius:4, backgroundColor: COLORS.white, height: 55}}
-            placeholder = {"Enter your phone number"}
-          />
-      </View>
           <View
             style={{
               marginTop: SIZES.base,
             }}>
               <ActionButton title={isLoading? <ActivityIndicator color={COLORS.white}/> :'Agree and continue'} handleAction={() =>handleSignup(firstName,email,password,setisLoading,navigation,school,course_of_study,phoneNumber)} style={{backgroundColor: COLORS.primary}}/>
           </View>
-          
+
 
           {/*  */}
-          <View style ={{marginVertical: SIZES.padding}}>
+          <View style ={{marginTop: SIZES.padding}}>
             <ParagraphText
               style={{color: COLORS.white}}
               message={"By selecting Agree and continue below,"}
@@ -200,7 +201,7 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
           {/*  */}
           <View style = {{flexDirection: 'row', backgroundColor: COLORS.lightBlue}}>
                 <ParagraphText
-                  style={{color: COLORS.white}}
+                  style={{color: COLORS.gray}}
                   message={'Already have an account, '}
                 />
             <TouchableOpacity
@@ -209,7 +210,7 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
                 style={{color: COLORS.lime,...FONTS.h3}}
                 message={'Login '}
               />
-            </TouchableOpacity> 
+            </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>

@@ -9,16 +9,16 @@ import { DisplayCourseCard } from '../../../components/DisplayCourseCard';
 
 
 
-export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,navigation}) => {
-    const [searchCodeValue, setsearchCodeValue] = useState('');
+export const GradeCourse:FC <{toggleSearch:any,navigation: any, route: any}>= ({toggleSearch,navigation, route}) => {
+    // const [grade, setgrade] = useState('');
     const [courses, setcourses] = useState([]);
     const [isLoading, setisLoading] = useState(false)
-    const isFocused = useIsFocused();
+    const {grade} = route.params;
  
     const getCourses =async () => {
       try {
         setisLoading(true)      
-        const path = 'course'
+        const path = `course/course/grades?grade=${grade}`
     const res = await httpService.get(path);
     if (res.data.success) {
         setisLoading(false)      
@@ -32,9 +32,14 @@ export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,
     }
     }
 
+    console.log('grade------',grade);
+    
+    useEffect( () => {
+      
+    }, [])
     useEffect( () => {
      getCourses()
-    }, [isFocused])
+    }, [])
     
   
 
@@ -67,8 +72,7 @@ export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,
           }
           {!courses.length ? 
           <View >
-            <ParagraphText message={'No Grades Added yet'} style={{backgroundColor: COLORS.creditBgCOlor,paddingVertical: SIZES.base, marginHorizontal: SIZES.padding}}/>
-            <ActionButton title={'Add'} handleAction={() => navigation.navigate("AddGrade")} style= {{width: SIZES.width/4, alignSelf: 'flex-end', marginTop: SIZES.largeTitle, backgroundColor: COLORS.primary,padding: SIZES.padding2,borderTopLeftRadius:SIZES.padding2, borderBottomLeftRadius: SIZES.padding2}}/>
+            <ParagraphText message={`No ${grade} Grades Added yet`} style={{backgroundColor: COLORS.creditBgCOlor,paddingVertical: SIZES.base, marginHorizontal: SIZES.padding}}/>
           </View>:
           renderCourseList()}
         </View>:
