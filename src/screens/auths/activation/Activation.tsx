@@ -38,8 +38,11 @@ export const Activation:FC <ActivationProps>= ({route,navigation}) => {
     
     const body = {
       token,
-      user
+      user:user._id,
+      code: value
     }
+
+     
 
     try {
       const path = 'activation'
@@ -75,7 +78,7 @@ export const Activation:FC <ActivationProps>= ({route,navigation}) => {
         imageStyle ={{opacity:0.7}}
       style ={{flex: 1}}>   
         <View style ={{marginHorizontal: SIZES.padding, marginTop: SIZES.h4}}>
-          <ParagraphText message={'Enter the 6-digit code sent to you at example@domain.com'} style={{...FONTS.h2}}/>
+          <ParagraphText message={`Enter the 6-digit code sent to you at ${user.email}`} style={{...FONTS.h2}}/>
         </View>
         <View style ={{marginHorizontal: SIZES.padding, flex: 1, justifyContent:'center'}}>
         <CodeField

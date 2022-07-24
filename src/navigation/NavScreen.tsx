@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AddGrade, Courseview, GradeCourse, Home } from '../screens';
 import { HomeTab } from './Tab';
 import { COLORS } from '../constants/theme';
-import { Activation, Login, Signup } from '../screens/auths';
+import { Activation, Login, Signup, Splash } from '../screens/auths';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +16,10 @@ export const RegNavScreen = () => {
   return (
     <NavigationContainer>
         <Stack.Navigator> 
+            {/* <Stack.Screen
+              component={Splash}
+              name ="Splash"
+            /> */}
              <Stack.Screen
             
             name = "Login" 

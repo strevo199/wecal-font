@@ -33,6 +33,8 @@ import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
 // react-native-snackbar
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
+// react-native-splash-screen
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 public class PackageList {
   private Application application;
@@ -88,7 +90,8 @@ public class PackageList {
       new RestartPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
-      new SnackbarPackage()
+      new SnackbarPackage(),
+      new SplashScreenReactPackage()
     ));
   }
 }

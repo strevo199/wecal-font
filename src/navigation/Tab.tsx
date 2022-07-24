@@ -99,7 +99,15 @@ export const HomeTab = () => {
                 }
             }}
         name='CourseList'>{(props) => <CourseList {...props} toggleSearch ={toggleSearch}/>}</Tab.Screen>
-        <Tab.Screen options={{unmountOnBlur: true}} component={Profile} name='Profile' />
+        <Tab.Screen options={{
+          unmountOnBlur: true,
+          headerTitleStyle: {
+            color: COLORS.white
+          },
+          headerStyle: {
+            backgroundColor: COLORS.primary,
+          },
+        }} component={Profile} name='Profile' />
     </Tab.Navigator>
   )
 }

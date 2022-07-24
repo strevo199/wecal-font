@@ -1,7 +1,7 @@
 import { StatusBar, StyleSheet, SafeAreaView, Text, View, Image, Platform, ImageBackground, FlatList, ScrollView, TouchableOpacity, ImageSourcePropType, RefreshControl, ActivityIndicator } from 'react-native'
 import React, { FC, Fragment, useEffect, useState } from 'react'
 import { dataService, httpService } from '../../../services'
-import { FONTS, rec, rec1, rec2 } from '../../../constants'
+import { circledUser, FONTS, rec, rec1, rec2 } from '../../../constants'
 import { COLORS, SIZES } from '../../../constants/theme';
 import moment from 'moment';
 import { Splash } from '../../auths';
@@ -75,7 +75,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
           </TouchableOpacity>
 
         </View>
-      </>
+      </> 
     )
   }
   
@@ -197,7 +197,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
           <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Your statistic</Text>
         </View>
           <Image
-            source={user.profile_url}
+            source={user.profile_url? user.profile_url: circledUser}
             resizeMode ='cover'
             style ={{
               width: 45,
@@ -205,7 +205,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
               borderRadius: SIZES.padding2 
             }}
           />
-      </View>
+      </View> 
     )
   }
 

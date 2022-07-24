@@ -2,8 +2,10 @@ import axios from "axios";
 import Snackbar from "react-native-snackbar";
 import { dataService } from "./data.service";
 import { COLORS } from '../constants/theme';
-const rootUrl = 'http://localhost:5000/';
-// const rootUrl = 'https://we-cal-be.herokuapp.com/';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// const rootUrl = 'http://localhost:5000/';
+import RNRestart from 'react-native-restart';
+const rootUrl = 'https://we-cal-be.herokuapp.com/';
 const api = 'api/v1';
 
 export const baseUrl = rootUrl+api;
@@ -44,7 +46,12 @@ httpService.interceptors.response.use(
                     backgroundColor: 'red',
                     textColor: COLORS.white
                 })
-            }
+            } 
+            // if (err.data.message == "unable to verify token") {
+            //     AsyncStorage.clear();
+            //     RNRestart.Restart()
+
+            // } 
         }
     }
 )

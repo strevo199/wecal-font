@@ -19,14 +19,18 @@ import LinearGradient from 'react-native-linear-gradient';
 import { img7, profile4 } from '../../../constants/images';
 import { ActionButton, ParagraphText, TextInputField } from '../../../components';
 import { handleLogin } from './Login.logic';
+import { httpService } from '../../../services';
 
 export const Login:FC <{navigation: any}>= ({navigation}) => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [userSchool, setuserSchool] = useState(false)
 
  
+
+
 
   return (
     <Fragment>
