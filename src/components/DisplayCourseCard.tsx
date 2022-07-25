@@ -15,7 +15,6 @@ interface courseItem {
   
 export const DisplayCourseCard = ({item}:{item:courseItem},navigation: any) => {
 
-    console.log(item);
     
 
     return ( 

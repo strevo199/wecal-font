@@ -8,7 +8,7 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
-import React, {FC, Fragment, useState} from 'react';
+import React, {FC, Fragment, useState, useContext} from 'react';
 import {
   COLORS,
   FONTS,
@@ -16,10 +16,10 @@ import {
   SIZES,
 } from '../../../constants';
 import LinearGradient from 'react-native-linear-gradient';
-import { img7, profile4 } from '../../../constants/images';
 import { ActionButton, ParagraphText, TextInputField } from '../../../components';
 import { handleLogin } from './Login.logic';
 import { httpService } from '../../../services';
+import { AuthContext } from '../../../services/context';
 
 export const Login:FC <{navigation: any}>= ({navigation}) => {
 
@@ -27,6 +27,7 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [userSchool, setuserSchool] = useState(false)
+  const {SignIn} = useContext(AuthContext)
 
  
 
@@ -113,7 +114,7 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
               flexDirection: 'row',
               justifyContent: 'flex-end'
             }}>
-              <ActionButton  title={isLoading? <ActivityIndicator color={COLORS.white}/> :'Login'}  handleAction={() =>handleLogin(email,password, setIsLoading)} style={{backgroundColor: COLORS.primary, width: SIZES.width/4}}/>
+              <ActionButton  title={isLoading? <ActivityIndicator color={COLORS.white}/> :'Login'}  handleAction={() =>handleLogin(email,password, setIsLoading,SignIn)} style={{backgroundColor: COLORS.primary, width: SIZES.width/4}}/>
           </View>
 
           <View style ={{flexDirection: 'row', marginVertical: SIZES.padding}}>

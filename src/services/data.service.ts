@@ -3,7 +3,7 @@ import RNRestart from 'react-native-restart';
 
 class DataService {
     loggedInData = {};
-    storedToken = ''; 
+    storedToken = null; 
 
     isLoading = false;
  

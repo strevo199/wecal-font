@@ -1,10 +1,11 @@
 import { ImageBackground, Platform, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ActionButton } from '../../../components/ActionButton';
 import { COLORS, FONTS, SIZES } from '../../../constants/theme';
 import { dataService } from '../../../services/data.service';
 import { ParagraphText } from '../../../components';
 import { circledUser } from '../../../constants/icons';
+import { AuthContext } from '../../../services/context';
 
 interface User {
   profile_url: string
@@ -12,12 +13,12 @@ interface User {
 
 export const Profile = () => {
   const [user, setuser] = useState({}) as User
+  const {SignOut} = useContext(AuthContext)
 
   useEffect(() => {
     setuser(dataService.loggedInUser())
   }, [])
 
-  console.log(user);
   
   return (
     <>
@@ -67,7 +68,7 @@ export const Profile = () => {
         </View> */}
       </View>
       <View style ={{alignItems:'flex-end', marginVertical: SIZES.base, marginHorizontal:SIZES.padding}}>
-        <ActionButton title={'Logout'} handleAction={dataService.logOutUser} style={{backgroundColor: COLORS.primary, width: SIZES.width/4}}/>
+        <ActionButton title={'Logout'} handleAction={SignOut} style={{backgroundColor: COLORS.primary, width: SIZES.width/4}}/>
       </View>
     </View>
     </>

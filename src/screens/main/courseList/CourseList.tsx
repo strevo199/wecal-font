@@ -1,40 +1,23 @@
 import { FlatList, ScrollView, TouchableOpacity, StatusBar, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
-import React, { FC, Fragment, ReactNode, useEffect, useState } from 'react'
+import React, { FC, Fragment, ReactNode, useContext, useEffect, useState } from 'react'
 import { COLORS, FONTS, SIZES } from '../../../constants/theme';
 import { ActionButton, SearchInputField } from '../../../components';
 import { httpService } from '../../../services/http.service';
 import { ParagraphText } from '../../../components/ParaText';
-import { useIsFocused } from '@react-navigation/native';
 import { DisplayCourseCard } from '../../../components/DisplayCourseCard';
+import { UserContext } from '../../../services/context';
 
 
 
 export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,navigation}) => {
     const [searchCodeValue, setsearchCodeValue] = useState('');
-    const [courses, setcourses] = useState([]);
+    const {LoadCourses, courses} = useContext(UserContext)
+    // const [courses, setcourses] = useSate([]);
     const [isLoading, setisLoading] = useState(false)
-    const isFocused = useIsFocused();
  
-    const getCourses =async () => {
-      try {
-        setisLoading(true)      
-        const path = 'course'
-    const res = await httpService.get(path);
-    if (res.data.success) {
-        setisLoading(false)      
-        setcourses(res.data.data);
-        
-    }
-    } catch (error) {
-        setisLoading(false); 
-        console.log(error);
-        
-    }
-    }
-
     useEffect( () => {
-     getCourses()
-    }, [isFocused])
+      LoadCourses()      
+    }, [])
     
   
 

@@ -1,5 +1,5 @@
 import { ImageBackground, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { Fragment, FC, useState, useEffect } from 'react'
+import React, { Fragment, FC, useState, useEffect, useContext } from 'react'
 import { rec1 } from '../../../constants/icons'
 import { ActionButton, ParagraphText } from '../../../components'
 import { FONTS, SIZES } from '../../../constants'
@@ -13,6 +13,7 @@ import RNRestart from 'react-native-restart';
 import { httpService } from '../../../services/http.service'
 import { dataService } from '../../../services'
 import Snackbar from 'react-native-snackbar'
+import { AuthContext } from '../../../services/context';
 
 interface ActivationProps {
   route: Route<any>,
@@ -25,7 +26,7 @@ export const Activation:FC <ActivationProps>= ({route,navigation}) => {
 
   const [value, setValue] = useState('')
   const [isLoading, setisLoading] = useState(false)
-
+  const {Activate} = useContext(AuthContext)
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const {token,user} = route.params || {}
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -45,7 +46,7 @@ export const Activation:FC <ActivationProps>= ({route,navigation}) => {
      
 
     try {
-      const path = 'activation'
+      const path = 'activation/by-code'
   const res = await httpService.post(path,body);
   if (res.data.success) {
       setisLoading(false)      
@@ -53,9 +54,10 @@ export const Activation:FC <ActivationProps>= ({route,navigation}) => {
         ['token', token],
         ['user', JSON.stringify(res.data.user)]
       ])
-      RNRestart.Restart()
+
+      Activate(token,user)
       Snackbar.show({
-          text: res.data.message,
+          text: 'YOU ARE WELCOME',
           duration: 3000,
           backgroundColor: COLORS.darkPrimary,
           textColor: COLORS.white

@@ -1,37 +1,18 @@
-import { SetStateAction } from "react";
+import { SetStateAction, useContext } from "react";
 import { Alert } from "react-native";
 import Snackbar from "react-native-snackbar";
 import { COLORS } from "../../../constants/theme";
 import { httpService } from "../../../services/http.service";
 
 
-   export const getCourse =async (setisLoading: { (value: SetStateAction<boolean>): void; (arg0: boolean): void; },item: { _id: any; },setCourseDetail: any) => {
-        try {
-            setisLoading(true)      
-          const path = `course/${item._id}`
-          
-      const res = await httpService.get(path);
-      if (res.data.success) {
-          setisLoading(false)      
-          setCourseDetail(res.data.data);
-          
-      }
-      } catch (error) {
-          setisLoading(false); 
-          console.log(error);
-          
-      }
-      }
-  
-
-export const ConfrimDelete =async (setModalVisible: { (value: SetStateAction<boolean>): void; (arg0: boolean): void; },navigation: { navigate: (arg0: string, arg1: string) => void; },evn: any, setisLoading: (arg0: boolean) => void) => {
+export const ConfrimDelete =async (setModalVisible: { (value: SetStateAction<boolean>): void; (arg0: boolean): void; },navigation: { navigate: (arg0: string, arg1: string) => void; },evn: any, setisLoading: (arg0: boolean) => void, DeleteCourse: any) => {
     try {
         setisLoading(true)
         const path = `course/${evn._id}`
         const res = await httpService.delete(path);
         if (res.data.success) {
             setisLoading(false)
-            
+            DeleteCourse(evn._id)
             Snackbar.show({
                 text: 'Successfully Deleted',
                 duration: 3000,

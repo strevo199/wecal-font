@@ -1,11 +1,12 @@
 import { StatusBar, StyleSheet, SafeAreaView, Text, View, Image, Platform, ImageBackground, FlatList, ScrollView, TouchableOpacity, ImageSourcePropType, RefreshControl, ActivityIndicator } from 'react-native'
-import React, { FC, Fragment, useEffect, useState } from 'react'
+import React, { FC, Fragment, useContext, useEffect, useState } from 'react'
 import { dataService, httpService } from '../../../services'
 import { circledUser, FONTS, rec, rec1, rec2 } from '../../../constants'
 import { COLORS, SIZES } from '../../../constants/theme';
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 import { Splash } from '../../auths';
 import { useIsFocused } from '@react-navigation/native';
+import { UserContext } from '../../../services/context';
 
 export const Home:FC <{navigation:any}>= ({navigation}) => {
 
@@ -22,45 +23,35 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
   }
   
   const [user, setuser] = useState({} as User)
-  const [userSchool, setuserSchool] = useState({} as User)
+  const {LoadUserSchool,userSchool} = useContext(UserContext)
   const [isLoading, setisLoading] = useState(false)
-  const isFocused = useIsFocused();
 
-  const [refreshing, setRefreshing] = useState(false);
   
   useEffect(() => {
     setuser(dataService.loggedInUser()) as unknown as User
   }, [])
-  const wait = (timeout: number | undefined) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-  }
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    getUserSchool()
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
 
-  const getUserSchool = async () => {
-    try {
-      setisLoading(true)      
-      const path = 'userschool'
-  const res = await httpService.get(path);
-  if (res.data.success) {
-      setisLoading(false)      
-      setuserSchool(res.data.data);
+
+  // const getUserSchool = async () => {
+  //   try {
+  //     setisLoading(true)      
+  //     const path = 'userschool'
+  // const res = await httpService.get(path);
+  // if (res.data.success) {
+  //     setisLoading(false)      
+  //     setuserSchool(res.data.data);
       
-  } 
-  } catch (error) {
-      setisLoading(false); 
-      console.log(error);
+  // } 
+  // } catch (error) {
+  //     setisLoading(false); 
+  //     console.log(error);
       
-  }
-  }
+  // }
+  // }
   useEffect(() => {
-    
-    getUserSchool();
-  }, [isFocused])
-
+    LoadUserSchool()    
+  }, [])
+  
   const renderAddGrade =() => { 
     return (
       <> 
@@ -139,7 +130,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
     return (
       <>
         {
-          userSchool.gradecounts ?
+          userSchool?.gradecounts ?
             <View>
             <View style ={{marginHorizontal: SIZES.padding,justifyContent:'space-between', flexDirection:'row',alignItems: 'center'}}>
               <Text style= {{...FONTS.h3, color: COLORS.primary}}>Summary</Text>
@@ -215,14 +206,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
           <StatusBar backgroundColor={COLORS.primary} barStyle={ Platform.OS === 'android'? 'light-content': 'dark-content'} />
           <SafeAreaView>
               {renderhomeHeader()}
-            <ScrollView
-                refreshControl={
-                  <RefreshControl
-                      refreshing ={refreshing}
-                      onRefresh ={onRefresh}
-                  />
-                }
-            >
+            <ScrollView>
               {renderShowCase()}
               {renderAddGrade()}
               {renderSummary()} 

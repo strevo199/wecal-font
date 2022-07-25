@@ -1,11 +1,12 @@
 import { ActivityIndicator, Alert, Image, Modal, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React,{FC, Fragment, useEffect, useState} from 'react'
+import React,{FC, Fragment, ReactNode, useContext, useEffect, useState} from 'react'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { cancel, edit, FONTS, setting, SIZES, trash } from '../../../constants'
 import { COLORS } from '../../../constants/theme';
 import { httpService } from '../../../services/http.service';
 import moment from 'moment';
-import { ConfrimDelete, getCourse, handleEditCourse } from './CourseviewLogic';
+import { ConfrimDelete} from './CourseviewLogic';
+import { UserContext } from '../../../services/context';
 
 
 interface CourseviewProps {
@@ -28,11 +29,12 @@ interface CourseviewProps {
 }
 
 export const Courseview:FC <CourseviewProps> = ({route,navigation}) => {
-    const [courseDetail, setCourseDetail] = useState({} as CourseDetail)
+    const {item} = route.params || {};
+    const {DeleteCourse} = useContext(UserContext)
+    const [courseDetail, setCourseDetail] = useState(item as CourseDetail)
     const [isLoading, setisLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
     const [editModalVisible, setEditModalVisible] = useState(false)
-    const {item} = route.params || {};
 
       const handleDelete = () => {
             Alert.alert('Delete Alert','Are you sure you want to delete this course',[
@@ -41,17 +43,11 @@ export const Courseview:FC <CourseviewProps> = ({route,navigation}) => {
                 },
                 {
                     text: "OK",
-                    onPress: () => ConfrimDelete(setModalVisible,navigation,courseDetail,setisLoading) 
+                    onPress: () => ConfrimDelete(setModalVisible,navigation,courseDetail,setisLoading, DeleteCourse) 
                 }
             ])
             
       }
-
-      
- 
-      useEffect( () => {
-        getCourse(setisLoading,item,setCourseDetail)
-       }, [])
 
     const renderCourseDetail = () => {
         return (
@@ -180,7 +176,7 @@ export const Courseview:FC <CourseviewProps> = ({route,navigation}) => {
                 <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Date added: <Text style ={{...FONTS.h3}}>{moment(courseDetail?.created_at).format("MMM-Do-YYYY")}</Text></Text>
                 <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Date updated: <Text style ={{...FONTS.h3}}>{moment(courseDetail?.updated_at).format("MMM-Do-YYYY")}</Text></Text>
             </View>
-            <View style ={{backgroundColor: COLORS.ligthGray, height:SIZES.largeTitle*1.5, width: SIZES.largeTitle* 1.5, justifyContent: 'center', alignItems: 'center', borderRadius: SIZES.base }}>
+            <View style ={{backgroundColor: COLORS.ligthGray, height:SIZES.largeTitle, width: SIZES.largeTitle, justifyContent: 'center', alignItems: 'center', borderRadius: SIZES.base }}>
                 <Text style ={{...FONTS.largeTitle, color:COLORS.primary}}>{courseDetail.grade}</Text>
             </View>
         </View>

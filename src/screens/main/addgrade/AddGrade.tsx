@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { FC, Fragment, useEffect, useState } from 'react';
+import React, { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { Dropdown } from '../../../components/DropSelect';
 import { gradeLabel, seamesterLabel } from '../../../constants/data';
 import { FONTS, SIZES } from '../../../constants';
@@ -11,6 +11,7 @@ import { ActionButton } from '../../../components';
 import { dataService } from '../../../services/data.service';
 import { httpService } from '../../../services/http.service';
 import Snackbar from 'react-native-snackbar';
+import { UserContext } from '../../../services/context';
 
 
 export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
@@ -21,6 +22,7 @@ export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
   const [courseCode, setcourseCode] = useState('')
   const [courseUnit, setcourseUnit] = useState('')
   const [courseTitle, setcourseTitle] = useState('')
+  const {AddCourse} = useContext(UserContext)
   const [isLoading, setisLoading] = useState(false)
 
   const handleSendGrade =async () => {
@@ -43,15 +45,16 @@ export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
       const res = await httpService.post(path,body);
       if (res.data.success) {
           setisLoading(false)      
-          console.log(res.data.data);
           
+          AddCourse(res.data._doc)
+
           Snackbar.show({
               text: 'Added Successfully',
               duration: 3000,
               backgroundColor: COLORS.darkPrimary,
               textColor: COLORS.white
           })
-          navigation.navigate("Home")
+          navigation.navigate("Home","CourseList")
       }
       } catch (error) {
           setisLoading(false);

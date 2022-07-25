@@ -38,7 +38,7 @@ import Snackbar from "react-native-snackbar";
                     backgroundColor: COLORS.darkPrimary,
                     textColor: COLORS.white
                 })
-                navigation.navigate('Activation', {token:res.data.token,user:res.data.user._id})
+                navigation.navigate('Activation', {token:res.data.token,user:res.data.user})
             }
             } catch (error) {
                 setisLoading(false);
