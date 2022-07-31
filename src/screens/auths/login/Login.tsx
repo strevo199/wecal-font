@@ -7,8 +7,10 @@ import {
   View,
   StatusBar,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import React, {FC, Fragment, useState, useContext} from 'react';
+import React, {FC, useState, useContext} from 'react';
 import {
   COLORS,
   FONTS,
@@ -34,9 +36,12 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
 
 
   return (
-    <Fragment>
+    <KeyboardAvoidingView
+    style={{flex: 1}}
+    behavior={Platform.OS === 'ios' ? 'padding' : null}
+    >
 
-    <StatusBar barStyle={'light-content'}/>
+    <StatusBar barStyle={Platform.OS !=='ios'?'light-content': 'dark-content'}/>
     <ImageBackground
       source={rec1}
       resizeMode="cover"
@@ -143,7 +148,7 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
         </View>
       </SafeAreaView>
     </ImageBackground>
-    </Fragment>
+    </KeyboardAvoidingView>
 
   );
 };

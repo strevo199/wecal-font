@@ -11,6 +11,7 @@ export const TextInputField:React.FC <{multiline:boolean, placeholder:string,sty
                 placeholder= {placeholder}
                 placeholderTextColor ={COLORS.gray}
                 secureTextEntry = {secureTextEntry}
+                selectionColor ={COLORS.primary}
                 onChangeText = {(val) => setValue(val)}
                 value = {value}
                 multiline = {multiline}

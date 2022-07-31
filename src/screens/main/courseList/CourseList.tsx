@@ -12,7 +12,6 @@ import { UserContext } from '../../../services/context';
 export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,navigation}) => {
     const [searchCodeValue, setsearchCodeValue] = useState('');
     const {LoadCourses, courses} = useContext(UserContext)
-    // const [courses, setcourses] = useSate([]);
     const [isLoading, setisLoading] = useState(false)
  
     useEffect( () => {

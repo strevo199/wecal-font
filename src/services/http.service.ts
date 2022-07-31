@@ -33,7 +33,7 @@ httpService.interceptors.response.use(
             Snackbar.show({
                 text: err.data.message,
                 duration: 6000,
-                backgroundColor: 'red',
+                backgroundColor: 'red', 
                 textColor: COLORS.white
             })
             if (
@@ -47,11 +47,10 @@ httpService.interceptors.response.use(
                     textColor: COLORS.white
                 })
             } 
-            // if (err.data.message == "unable to verify token") {
-            //     AsyncStorage.clear();
-            //     RNRestart.Restart()
+            if (err.data.message == "unable to verify token") {
+                RNRestart.Restart()
 
-            // } 
+            } 
         }
     }
 )

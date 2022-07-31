@@ -7,6 +7,9 @@ import { COLORS } from '../constants/theme';
 import { Activation, Login, Signup, Splash } from '../screens/auths';
 import { UserContext } from '../services/context';
 import { httpService } from '../services/http.service';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { dataService } from '../services/data.service';
+import { eventService } from '../services/event.services';
 
 const Stack = createStackNavigator();
 
@@ -48,9 +51,10 @@ export const RegNavScreen = () => {
 export const MainNavScreen = () => { 
 
     const initialUserState = {
-        courses: [],
-        userSchool: {},
-        isLoading: true
+        courses: dataService.courses(),
+        userSchool: dataService.userSchool(),
+        isLoading: true,
+        refresh: false
     }
 
     const userReducer = (prevState: any, action: any) => {
@@ -76,44 +80,63 @@ export const MainNavScreen = () => {
             case 'DELETEONECOURSE':
                 
                 return {
-                    ...prevState,
+                    ...prevState,          
                     isLoading: false,
                     courses: action.courses
                 }
         }
     }
     const [userState, dispatch] = useReducer(userReducer, initialUserState)
-
+ 
   const userContext = useMemo(() => ({
       LoadUserSchool: async () => {
-        try {
-            userState.isLoading;
-            const path = 'userschool'
-        const res = await httpService.get(path);
-        if (res.data.success) {
-            dispatch({type:'GETUSERSCHOOL', userSchool: res.data.data});                        
-        }  
-        } catch (error) {   
+          
+        if (userState.userSchool !== null) {          
+          dispatch({type:'GETUSERSCHOOL', userSchool: userState.userSchool});                        
+        } else {
+          try {
+              userState.isLoading;
+              const path = 'userschool'
+          const res = await httpService.get(path);
+          if (res.data.success) {
+              
+              await AsyncStorage.setItem("userschool",JSON.stringify(res.data.data));
+              dispatch({type:'GETUSERSCHOOL', userSchool: res.data.data});                        
+          }  
+          } catch (error) {   
+          }
+          
         }
+
+        
+
         
       },
       AddCourse: (course: any) => {        
-        dispatch({type: 'ADDCOURSE', course})
+        dispatch({type: 'ADDCOURSE', course});
+        // eventService.reloadUserSchool();
+        eventService.reloadCourses();
       },
       DeleteCourse: (id: string) => {    
         dispatch({type: 'DELETEONECOURSE', courses:userState.courses.filter((item:any) => (item._id !== id))})
+        eventService.reloadCourses();
       }
       ,
       LoadCourses: async () => {
-        try {
-            userState.isLoading; 
-            const path = 'course'
-        const res = await httpService.get(path);
-        if (res.data.success) {
-            dispatch({type: 'GETCOURSES', courses: res.data.data})
-            
-        }
-        } catch (error) {
+             
+        if (userState.courses.length) {
+          dispatch({type: 'GETCOURSES', courses: userState.courses})
+        } else {
+          try {
+              userState.isLoading; 
+              const path = 'course'
+          const res = await httpService.get(path);
+          if (res.data.success) {
+              dispatch({type: 'GETCOURSES', courses: res.data.data})
+              await AsyncStorage.setItem("courses",JSON.stringify(res.data.data));
+          }
+          } catch (error) {
+          }
         }
       },
       userSchool: userState.userSchool,

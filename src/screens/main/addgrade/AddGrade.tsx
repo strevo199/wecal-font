@@ -47,7 +47,6 @@ export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
           setisLoading(false)      
           
           AddCourse(res.data._doc)
-
           Snackbar.show({
               text: 'Added Successfully',
               duration: 3000,

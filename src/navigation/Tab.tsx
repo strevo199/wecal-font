@@ -11,12 +11,6 @@ const Tab = createBottomTabNavigator();
 
 export const HomeTab = () => {
 
-  const tabOptions = {
-    showLabel: false,
-    style: {
-      height: '10%'
-    }
-  }
 
   const [toggleSearch, settoggleSearch] = useState(false);
 
@@ -83,7 +77,6 @@ export const HomeTab = () => {
           component={Home} name='MainHome' />
         <Tab.Screen 
             options={{ 
-                  // unmountOnBlur: true,
                   title: 'Course List',
                   headerTitleStyle: {
                       color:COLORS.white},
@@ -100,7 +93,6 @@ export const HomeTab = () => {
             }}
         name='CourseList'>{(props) => <CourseList {...props} toggleSearch ={toggleSearch}/>}</Tab.Screen>
         <Tab.Screen options={{
-          unmountOnBlur: true,
           headerTitleStyle: {
             color: COLORS.white
           },

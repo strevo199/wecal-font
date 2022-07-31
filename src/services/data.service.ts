@@ -4,7 +4,8 @@ import RNRestart from 'react-native-restart';
 class DataService {
     loggedInData = {};
     storedToken = null; 
-
+    userSchoolData = null;
+    coursesData = [];
     isLoading = false;
  
     constructor() {
@@ -17,6 +18,28 @@ class DataService {
             } catch (error) {} 
         };
 
+        const getUserSchool = async () => {
+            try {
+                const userSch = await AsyncStorage.getItem('userschool');
+                if (userSch) {                    
+                    this.userSchoolData = JSON.parse(userSch);
+                }
+            } catch (error) {
+                
+            }
+        }
+
+        const getCourseSchool =async () => {
+            try {
+                const courses = await AsyncStorage.getItem('courses');
+                if (courses) {
+                    this.coursesData = JSON.parse(courses);
+                }
+            } catch (error) {
+                
+            }
+        }
+
         const getToken =async () => {
             try { 
                 const token = await AsyncStorage.getItem('token')
@@ -26,8 +49,9 @@ class DataService {
             } catch (error) {}
         }
       
-        
+        getUserSchool();
         getToken(); 
+        getCourseSchool();
         getLoggedInUser(); 
     } 
 
@@ -35,11 +59,19 @@ class DataService {
         
         return this.loggedInData; 
     }
+    courses() {
+        return this.coursesData;
+    }
+
+    userSchool() {
+        return this.userSchoolData;
+    }
 
     async logOutUser() {
         try {
-            await AsyncStorage.clear() 
-            RNRestart.Restart()
+            // await AsyncStorage.clear() ;
+            await AsyncStorage.multiRemove(["courses", "userschool", "user"])
+            // RNRestart.Restart()
         } catch (error) {
             
         }

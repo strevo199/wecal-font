@@ -5,9 +5,9 @@ import { dataService } from './src/services/data.service';
 import { RegNavScreen, MainNavScreen } from './src/navigation/NavScreen';
 import SplashScreen from 'react-native-splash-screen';
 import { AuthContext } from './src/services/context';
-import { handleLogin } from './src/screens/auths/login/Login.logic';
 import { Splash } from './src/screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNRestart from 'react-native-restart';
 
 
 
@@ -15,8 +15,8 @@ const App = () => {
 
   const initialLoginState = {
     isLoading: true,
-    user: null,
-    userToken: null
+    user: dataService.loggedInUser(),
+    userToken: dataService.authToken,
   }
 
   const loginReducer = (prevState: any, action: any) => {
@@ -38,8 +38,8 @@ const App = () => {
         
         return {
           ...prevState,
-          user: null,
-          userToken: null,
+          // user: null,
+          // userToken: null,
           isLoading: false
         };
       case 'REGISTER':
@@ -69,13 +69,19 @@ const App = () => {
 
     SignOut: async () => {
       try {
-        await AsyncStorage.removeItem('token') 
+        await AsyncStorage.clear(c => {
+          if (c == null) {
+             dispatch({type: 'LOGOUT'})    
+             RNRestart.Restart()
+                  
+          }
+          
+        }); 
     } catch (error) {
         console.log(error);
         
     }
-      dispatch({type: 'LOGOUT'})
-    },
+    },user: loginState.user,
 
     Activate: (token: any,user: any) => {
       dispatch({type: 'REGISTER', token: token,user: user})

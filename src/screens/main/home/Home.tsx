@@ -8,56 +8,48 @@ import { Splash } from '../../auths';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../../../services/context';
 
-export const Home:FC <{navigation:any}>= ({navigation}) => {
 
-  interface User {
-    updated_at: MomentInput;
-    gradecounts: any;
-    totalunit: any;
+export const Home:FC <{navigation:any}>= ({navigation}) => {
+    
+    interface User {
+        updated_at: MomentInput;
+        gradecounts: any;
+        totalunit: any;
     totalpoint: any;
     full_name: string,
     profile_url: string,
     cgpa: string,
     standing: string,
     last_gpa:string
-  }
-  
-  const [user, setuser] = useState({} as User)
-  const {LoadUserSchool,userSchool} = useContext(UserContext)
-  const [isLoading, setisLoading] = useState(false)
+}
 
-  
-  useEffect(() => {
+const [user, setuser] = useState({} as User)
+const {LoadUserSchool,userSchool} = useContext(UserContext)
+
+
+useEffect(() => {
     setuser(dataService.loggedInUser()) as unknown as User
-  }, [])
+}, [])
 
 
-  // const getUserSchool = async () => {
-  //   try {
-  //     setisLoading(true)      
-  //     const path = 'userschool'
-  // const res = await httpService.get(path);
-  // if (res.data.success) {
-  //     setisLoading(false)      
-  //     setuserSchool(res.data.data);
-      
-  // } 
-  // } catch (error) {
-  //     setisLoading(false); 
-  //     console.log(error);
-      
-  // }
-  // }
-  useEffect(() => {
+useEffect(() => {
     LoadUserSchool()    
-  }, [])
-  
-  const renderAddGrade =() => { 
+}, [])
+
+
+const RenderHeaderComponent =() =>  (
+        <View>
+            {renderShowCase()}
+            {renderAddGrade()}
+        </View>
+    )
+
+const renderAddGrade =() => { 
     return (
       <> 
-       {/* { userSchool.totalunit > 10 && <View  style = {{backgroundColor: COLORS.lightBlue,marginVertical: SIZES.padding2,padding: SIZES.padding }}>
+       { userSchool.totalunit > 10 && <View  style = {{backgroundColor: COLORS.lightBlue,marginVertical: SIZES.padding2,padding: SIZES.padding }}>
           <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Status: <Text  style ={{...FONTS.h3, paddingHorizontal: SIZES.base,textTransform: 'uppercase',color: COLORS.gray}}>{userSchool?.grade_mark?.class? userSchool?.grade_mark?.class: '***'}</Text></Text>
-        </View>} */}
+        </View>}
         <View style ={{alignItems: 'flex-end'}}>
           <TouchableOpacity
             onPress={() => navigation.navigate("AddGrade")}
@@ -66,6 +58,18 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
           </TouchableOpacity>
 
         </View>
+         <View>
+             <View style ={{marginHorizontal: SIZES.padding,justifyContent:'space-between', flexDirection:'row',alignItems: 'center'}}>
+               <Text style= {{...FONTS.h3, color: COLORS.primary}}>Summary</Text>
+               <Text style= {{...FONTS.h1, color: COLORS.link}}>...</Text>
+             </View> 
+             <View>
+               <View style ={{marginVertical: SIZES.padding2, flexDirection: 'row', justifyContent: 'space-between'}} >
+                 {quickSummaryCards(`${userSchool.totalpoint}`,"Total Quanlity Points",rec,COLORS.white,)}
+                 {quickSummaryCards(`${userSchool.totalunit}`,"Total Units",rec1,COLORS.primary)}
+               </View>
+             </View>
+           </View>
       </> 
     )
   }
@@ -96,12 +100,12 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
       </View>
     ) 
   }   
-  const quickActionCards  = (count: number, content: string, icon: ImageSourcePropType | undefined,color: string, index: any) => {
+  const quickActionCards  = (count: number, content: string, icon: ImageSourcePropType | undefined,color: string) => {
     return (
       <TouchableOpacity
         onPress={() =>       navigation.navigate("GradeCourse",{grade:content})
       }
-      key = {`item-${index}`}>
+      >
       <ImageBackground
         source={icon} 
         resizeMode ='cover'
@@ -131,25 +135,23 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
       <>
         {
           userSchool?.gradecounts ?
-            <View>
-            <View style ={{marginHorizontal: SIZES.padding,justifyContent:'space-between', flexDirection:'row',alignItems: 'center'}}>
-              <Text style= {{...FONTS.h3, color: COLORS.primary}}>Summary</Text>
-              <Text style= {{...FONTS.h1, color: COLORS.link}}>...</Text>
-            </View> 
-            <View>
-              <ScrollView showsHorizontalScrollIndicator ={false} style ={{marginVertical: SIZES.padding2}} horizontal>
-                {quickSummaryCards(`${userSchool.totalpoint}`,"Total Quanlity Points",rec,COLORS.white,)}
-                {quickSummaryCards(`${userSchool.totalunit}`,"Total Units",rec1,COLORS.primary)}
-              </ScrollView>
-              <ScrollView showsHorizontalScrollIndicator ={false}  horizontal>
-                { 
-                  userSchool.gradecounts && userSchool?.gradecounts.map((item: { markCount: any; mark: any; }, index: any) => {
-                    return quickActionCards(item.markCount, item.mark,rec2,COLORS.primary, index = index)
-                  })
-                }
-              </ScrollView>
-            </View>
-            </View>
+           
+            <FlatList
+                ListHeaderComponent={RenderHeaderComponent}
+                ListFooterComponent ={<View style ={{marginBottom: 60}}></View>}
+                showsVerticalScrollIndicator ={false}
+                data={userSchool.gradecounts && userSchool?.gradecounts}
+                keyExtractor = {item => `item-${item.index}`}
+                numColumns ={2}
+                contentContainerStyle ={{
+                    marginHorizontal: SIZES.padding
+                }} 
+                columnWrapperStyle={{
+                    justifyContent: 'space-between',
+                    marginVertical: SIZES.padding
+                }}
+                renderItem ={({item}) => quickActionCards(item.markCount, item.mark,rec2,COLORS.primary)}
+            />
           :
             <View>
               <ActivityIndicator size={'large'} color = {COLORS.primary}/>
@@ -166,7 +168,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
       <ImageBackground
         source={rec}
         resizeMode ='cover'
-        style ={{marginHorizontal: SIZES.padding, flexDirection:'row', justifyContent: 'space-around',marginVertical: SIZES.h2, alignItems: 'center',padding: SIZES.h1}}
+        style ={{ flexDirection:'row', justifyContent: 'space-around',marginVertical: SIZES.h2, alignItems: 'center',padding: SIZES.h1}}
         imageStyle={{ borderRadius: SIZES.base,}}
        >
         <View style ={{height:65,width: 65, justifyContent:'center', alignItems:'center', backgroundColor: COLORS.white,borderRadius:35, borderWidth:3,borderColor: COLORS.primary}}>
@@ -182,7 +184,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
 
   const renderhomeHeader =() => {
     return (
-      <View style ={{marginHorizontal: SIZES.padding, alignItems: 'center', marginTop: Platform.OS =='android' ? SIZES.padding: '', flexDirection: 'row', justifyContent: 'space-between', }}>
+      <View style ={{marginHorizontal: SIZES.padding, alignItems: 'center', marginTop: Platform.OS =='android' ? SIZES.padding: 0, flexDirection: 'row', justifyContent: 'space-between', }}>
         <View>
           <Text style ={{...FONTS.body3, color: COLORS.darkPrimary}}>Welcome, {user.full_name}</Text>
           <Text style ={{...FONTS.h2, color: COLORS.darkPrimary}}>Your statistic</Text>
@@ -206,11 +208,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
           <StatusBar backgroundColor={COLORS.primary} barStyle={ Platform.OS === 'android'? 'light-content': 'dark-content'} />
           <SafeAreaView>
               {renderhomeHeader()}
-            <ScrollView>
-              {renderShowCase()}
-              {renderAddGrade()}
               {renderSummary()} 
-            </ScrollView>
           </SafeAreaView> 
     </Fragment>
   )

@@ -7,6 +7,7 @@ import {
   View,
   ActivityIndicator,
   ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {FC, useEffect, useRef, useState} from 'react';
 
@@ -63,6 +64,11 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
 
 
   return (
+    <KeyboardAvoidingView
+    style={{flex: 1}}
+    behavior={Platform.OS === 'ios' ? 'padding' : null}
+    >
+
     <ScrollView style={{
       flex: 1,
     }}>
@@ -216,6 +222,8 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
       </SafeAreaView>
     </ImageBackground>
         </ScrollView>
+        </KeyboardAvoidingView>
+
   );
 };
 

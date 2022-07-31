@@ -32,11 +32,7 @@ export const GradeCourse:FC <{toggleSearch:any,navigation: any, route: any}>= ({
     }
     }
 
-    console.log('grade------',grade);
     
-    useEffect( () => {
-      
-    }, [])
     useEffect( () => {
      getCourses()
     }, [])
