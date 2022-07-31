@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SetStateAction, useContext } from "react";
-import { user } from "../../../constants";
+import Snackbar from "react-native-snackbar";
+import { COLORS, user } from "../../../constants";
 import { AuthContext } from "../../../services/context";
 import { dataService } from '../../../services/data.service';
 import { httpService } from '../../../services/http.service';
@@ -36,6 +37,12 @@ export const handleLogin = async (email: string ,password: string, setIsLoading:
 
     } else {
       setIsLoading(false)
+      Snackbar.show({
+        text: "Fill All Fields",
+        duration: 6000,
+        backgroundColor: 'red', 
+        textColor: COLORS.white
+    })
     }
 
 

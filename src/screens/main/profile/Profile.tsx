@@ -70,7 +70,10 @@ export const Profile = () => {
               <ParagraphText message={'CGPA:'} style={{...FONTS.h3,color: COLORS.primary,marginRight: SIZES.padding}}/>
               <ParagraphText message={user?.user_school.cgpa} style={{...FONTS.h3,color: COLORS.gray,marginRight: SIZES.padding}}/>
             </View>
-            <View style ={{flexDirection: 'row', borderBottomWidth:2, borderBottomColor: COLORS.lightBlue, marginTop:SIZES.padding2, paddingVertical: SIZES.base}}>
+            <View style ={{flexDirection: 'row', borderBottomWidth:2, borderBottomColor: COLORS.lightBlue, paddingVertical: SIZES.base}}>
+              <ParagraphText message={'STATUS:'} style={{...FONTS.h2,color: COLORS.primary,marginRight: SIZES.padding}}/>
+            </View>
+            <View style ={{flexDirection: 'row', borderBottomWidth:2, borderBottomColor: COLORS.lightBlue, paddingVertical: SIZES.base}}>
               <ParagraphText message={user?.user_school.grade_mark.class} style={{...FONTS.h3,color: COLORS.primary,marginRight: SIZES.padding}}/>
               <ParagraphText message={`${user?.user_school.grade_mark.upper} - ${user?.user_school.grade_mark.lower}`} style={{...FONTS.h3,color: COLORS.gray,marginRight: SIZES.padding}}/>
             </View>

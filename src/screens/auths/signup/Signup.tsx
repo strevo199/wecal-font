@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import React, {FC, useEffect, useRef, useState} from 'react';
 
@@ -69,7 +70,9 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
     behavior={Platform.OS === 'ios' ? 'padding' : null}
     >
 
-    <ScrollView style={{
+    <ScrollView
+      showsVerticalScrollIndicator ={false}
+    style={{
       flex: 1,
     }}>
     <ImageBackground
