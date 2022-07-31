@@ -56,7 +56,7 @@ export const Profile = () => {
         </View> 
         <View style= {{padding: SIZES.padding}}>
             <View style ={{flexDirection: 'row', borderBottomWidth:2, borderBottomColor: COLORS.lightBlue, paddingVertical: SIZES.base}}>
-              <ParagraphText message={'School Detail:'} style={{...FONTS.h3,color: COLORS.darkPrimary,marginRight: SIZES.padding}}/>
+              <ParagraphText message={'School Detail:'} style={{...FONTS.h2,color: COLORS.darkPrimary,marginRight: SIZES.padding}}/>
             </View>
             <View style ={{flexDirection: 'row', borderBottomWidth:2, borderBottomColor: COLORS.lightBlue, paddingVertical: SIZES.base}}>
               <ParagraphText message={'Name:'} style={{...FONTS.h3,color: COLORS.primary,marginRight: SIZES.padding}}/>
