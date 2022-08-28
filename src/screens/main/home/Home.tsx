@@ -24,7 +24,7 @@ export const Home:FC <{navigation:any}>= ({navigation}) => {
 }
 
 const [user, setuser] = useState({} as User)
-const {LoadUserSchool,userSchool} = useContext(UserContext)
+const {LoadUserSchool,userSchool,LoadCourses} = useContext(UserContext)
 
 
 useEffect(() => {
@@ -33,7 +33,8 @@ useEffect(() => {
 
 
 useEffect(() => {
-    LoadUserSchool()    
+    LoadUserSchool();
+    LoadCourses();
 }, [])
 
 

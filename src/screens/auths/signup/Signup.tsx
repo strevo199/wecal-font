@@ -55,7 +55,6 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
 
     }
 
-
     }
 
     useEffect(() => {
@@ -132,7 +131,7 @@ export const Signup:FC <{navigation: any}>= ({navigation}) => {
                   textContainerStyle ={{height:"100%"}}
                   codeTextStyle ={{display:'none'}}
                   onChangeFormattedText={(text) => {
-                    setPhoneNumber(text); 
+                    setPhoneNumber(text);
                   }}
                   containerStyle ={{width:'100%',borderColor:COLORS.gray, borderWidth:1, borderRadius:4, backgroundColor: COLORS.white,}}
                   placeholder = {"Enter your phone number"}

@@ -1,40 +1,23 @@
 import { FlatList, ScrollView, TouchableOpacity, StatusBar, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
-import React, { FC, Fragment, ReactNode, useEffect, useState } from 'react'
+import React, { FC, Fragment, ReactNode, useContext, useEffect, useState } from 'react'
 import { COLORS, FONTS, SIZES } from '../../../constants/theme';
 import { ActionButton, SearchInputField } from '../../../components';
 import { httpService } from '../../../services/http.service';
 import { ParagraphText } from '../../../components/ParaText';
 import { useIsFocused } from '@react-navigation/native';
 import { DisplayCourseCard } from '../../../components/DisplayCourseCard';
+import { UserContext } from '../../../services/context';
 
 
 
 export const GradeCourse:FC <{toggleSearch:any,navigation: any, route: any}>= ({toggleSearch,navigation, route}) => {
-    // const [grade, setgrade] = useState('');
-    const [courses, setcourses] = useState([]);
+  const {ListByGrade,filtercourses} = useContext(UserContext)
     const [isLoading, setisLoading] = useState(false)
     const {grade} = route.params;
- 
-    const getCourses =async () => {
-      try {
-        setisLoading(true)      
-        const path = `course/course/grades?grade=${grade}`
-    const res = await httpService.get(path);
-    if (res.data.success) {
-        setisLoading(false)      
-        setcourses(res.data.data);
-        
-    }
-    } catch (error) {
-        setisLoading(false); 
-        console.log(error);
-        
-    }
-    }
-
     
     useEffect( () => {
-     getCourses()
+      ListByGrade(grade);
+      
     }, [])
     
   
@@ -44,7 +27,7 @@ export const GradeCourse:FC <{toggleSearch:any,navigation: any, route: any}>= ({
     return (
       <View style ={{marginHorizontal: SIZES.padding, flex:1}}>
         <FlatList
-          data={courses}
+          data={filtercourses}
           keyExtractor = {item => `item-${item._id}`}
           renderItem = {(item) =>DisplayCourseCard(item,navigation)} 
         />
@@ -66,7 +49,7 @@ export const GradeCourse:FC <{toggleSearch:any,navigation: any, route: any}>= ({
               <SearchInputField multiline={false} placeholder={'Enter course code'} style={{borderWidth: 0.6}} setValue={setsearchCodeValue} hint={undefined} secureTextEntry={false} value={searchCodeValue}/>
           </View>
           }
-          {!courses.length ? 
+          {!filtercourses.length ? 
           <View >
             <ParagraphText message={`No ${grade} Grades Added yet`} style={{backgroundColor: COLORS.creditBgCOlor,paddingVertical: SIZES.base, marginHorizontal: SIZES.padding}}/>
           </View>:

@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AddGrade, Courseview, GradeCourse, Home } from '../screens';
 import { HomeTab } from './Tab';
 import { COLORS } from '../constants/theme';
-import { Activation, Login, Signup, Splash } from '../screens/auths';
+import { Activation, Login, Signup } from '../screens/auths';
 import { UserContext } from '../services/context';
 import { httpService } from '../services/http.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,22 +16,22 @@ const Stack = createStackNavigator();
 export const RegNavScreen = () => {
 
 
-  
+
 
   return (
     <NavigationContainer>
-        <Stack.Navigator> 
+        <Stack.Navigator>
              <Stack.Screen
-            
-            name = "Login" 
+
+            name = "Login"
             options={{headerShown: false}}
             component={Login} />
-            <Stack.Screen 
-            name = "Signup" 
+            <Stack.Screen
+            name = "Signup"
             options={{headerShown: false}}
             component={Signup} />
-            <Stack.Screen 
-            name = "Activation" 
+            <Stack.Screen
+            name = "Activation"
             options={{
               headerTitleStyle: {
                 color: COLORS.white
@@ -43,33 +43,34 @@ export const RegNavScreen = () => {
             }}
             component={Activation} />
         </Stack.Navigator>
-    </NavigationContainer> 
+    </NavigationContainer>
   )
 }
 
 
-export const MainNavScreen = () => { 
+export const MainNavScreen = () => {
 
     const initialUserState = {
         courses: dataService.courses(),
         userSchool: dataService.userSchool(),
         isLoading: true,
-        refresh: false
+        refresh: false,
+        filtercourses: []
     }
 
     const userReducer = (prevState: any, action: any) => {
         switch (action.type) {
             case 'GETUSERSCHOOL':
-                return { 
+                return {
                     ...prevState,
                     userSchool: action.userSchool,
-                    isLoading:  false 
+                    isLoading:  false
                 };
             case 'GETCOURSES':
                 return {
                     ...prevState,
                     courses: action.courses,
-                    isLoading:  false 
+                    isLoading:  false
                 };
             case 'ADDCOURSE':
                 return {
@@ -78,57 +79,59 @@ export const MainNavScreen = () => {
                     courses: [...prevState.courses,action.course]
                 };
             case 'DELETEONECOURSE':
-                
                 return {
-                    ...prevState,          
+                    ...prevState,
                     isLoading: false,
                     courses: action.courses
+                }
+            case 'LISTCOURSEBYGRADE':
+                return {
+                  ...prevState,
+                  isLoading: false,
+                  filtercourses:action.filtercourses
                 }
         }
     }
     const [userState, dispatch] = useReducer(userReducer, initialUserState)
- 
+
   const userContext = useMemo(() => ({
       LoadUserSchool: async () => {
-          
-        if (userState.userSchool !== null) {          
-          dispatch({type:'GETUSERSCHOOL', userSchool: userState.userSchool});                        
+        if (userState.userSchool !== null) {
+          dispatch({type:'GETUSERSCHOOL', userSchool: userState.userSchool});
         } else {
           try {
               userState.isLoading;
               const path = 'userschool'
           const res = await httpService.get(path);
           if (res.data.success) {
-              
               await AsyncStorage.setItem("userschool",JSON.stringify(res.data.data));
-              dispatch({type:'GETUSERSCHOOL', userSchool: res.data.data});                        
-          }  
-          } catch (error) {   
+              dispatch({type:'GETUSERSCHOOL', userSchool: res.data.data});
           }
-          
+          } catch (error) {
+          }
+
         }
-
-        
-
-        
       },
-      AddCourse: (course: any) => {        
+      ListByGrade: async (event: string) => {
+       
+        dispatch({type: 'LISTCOURSEBYGRADE', filtercourses:userState.courses.filter((item: any) => item.grade === event)})
+      },
+      AddCourse: (course: any) => {
         dispatch({type: 'ADDCOURSE', course});
-        // eventService.reloadUserSchool();
         eventService.reloadCourses();
       },
-      DeleteCourse: (id: string) => {    
+      DeleteCourse: (id: string) => {
         dispatch({type: 'DELETEONECOURSE', courses:userState.courses.filter((item:any) => (item._id !== id))})
         eventService.reloadCourses();
       }
       ,
+
       LoadCourses: async () => {
-             
         if (userState.courses.length) {
-          dispatch({type: 'GETCOURSES', courses: userState.courses})
+          dispatch({type: 'GETCOURSES', courses: userState.courses})          
         } else {
           try {
-              userState.isLoading; 
+              userState.isLoading;
               const path = 'course'
           const res = await httpService.get(path);
           if (res.data.success) {
@@ -141,7 +144,8 @@ export const MainNavScreen = () => {
       },
       userSchool: userState.userSchool,
       courses: userState.courses,
-      
+      filtercourses: userState.filtercourses,
+
   }), [userState])
 
 
@@ -149,24 +153,24 @@ export const MainNavScreen = () => {
     <UserContext.Provider value={userContext}>
       <NavigationContainer>
           <Stack.Navigator>
-                    
-            <Stack.Screen 
+
+            <Stack.Screen
                 options={{headerShown: false}}
               name = "Home" component={HomeTab} />
-              <Stack.Screen 
+              <Stack.Screen
                 options={{
                     headerStyle: {
                       backgroundColor: COLORS.primary,
                     },
                     headerBackTitle: ' ',
-                    headerTintColor: COLORS.white, 
+                    headerTintColor: COLORS.white,
                     headerTitle: 'Add Grade',
                     headerTitleStyle: {
                       color: COLORS.white
                     }
                 }}
               name = "AddGrade" component={AddGrade}/>
-              <Stack.Screen  
+              <Stack.Screen
                 options={{
                     headerStyle: {
                       backgroundColor: COLORS.primary,
@@ -179,7 +183,7 @@ export const MainNavScreen = () => {
                     }
                 }}
               name = "Courseview" component={Courseview}/>
-              <Stack.Screen  
+              <Stack.Screen
                 options={{
                   headerStyle: {
                     backgroundColor: COLORS.primary,

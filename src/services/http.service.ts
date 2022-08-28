@@ -2,8 +2,6 @@ import axios from "axios";
 import Snackbar from "react-native-snackbar";
 import { dataService } from "./data.service";
 import { COLORS } from '../constants/theme';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// const rootUrl = 'http://localhost:5000/';
 import RNRestart from 'react-native-restart';
 const rootUrl = 'https://we-cal-be.herokuapp.com/';
 const api = 'api/v1';
@@ -12,10 +10,10 @@ export const baseUrl = rootUrl+api;
 
 const token = dataService.authToken();
 
-export const isLoading:boolean = false ; 
+export const isLoading:boolean = false ;
 export const httpService = axios.create({
-    baseURL:baseUrl, 
-    timeout: 10000, 
+    baseURL:baseUrl,
+    timeout: 10000,
     withCredentials: true,
     headers: {
         Authorization: `Bearer ${token}`,
@@ -33,11 +31,11 @@ httpService.interceptors.response.use(
             Snackbar.show({
                 text: err.data.message,
                 duration: 6000,
-                backgroundColor: 'red', 
+                backgroundColor: 'red',
                 textColor: COLORS.white
             })
             if (
-                err.status === 401 && 
+                err.status === 401 &&
                 err.data.message === "Incorrect Email or Password"
             ) {
                 Snackbar.show({
@@ -46,11 +44,11 @@ httpService.interceptors.response.use(
                     backgroundColor: 'red',
                     textColor: COLORS.white
                 })
-            } 
+            }
             if (err.data.message == "unable to verify token") {
                 RNRestart.Restart()
 
-            } 
+            }
         }
     }
 )

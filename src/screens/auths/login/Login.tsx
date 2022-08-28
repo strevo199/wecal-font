@@ -28,10 +28,9 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [userSchool, setuserSchool] = useState(false)
   const {SignIn} = useContext(AuthContext)
 
- 
+
 
 
 
@@ -50,7 +49,7 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
       }}
       style={{
         flex: 1,
-        
+
       }}>
       <SafeAreaView
         style={{
@@ -86,10 +85,10 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
             marginVertical: SIZES.h1,
           }}>
 
-          {/* emial */} 
-          
+          {/* emial */}
+
           <View>
-            <TextInputField multiline={false} 
+            <TextInputField multiline={false}
                 placeholder={'Enter Email'} style={{
                 borderColor: COLORS.primary,
                 borderWidth: 2,
@@ -100,22 +99,22 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
           {/* password */}
 
           <View>
-            <TextInputField multiline={false} 
-            placeholder={'enter your password'} 
+            <TextInputField multiline={false}
+            placeholder={'enter your password'}
             style={{
               borderColor: COLORS.primary,
               borderWidth: 2,
               backgroundColor: COLORS.white,
             }}
-            setValue={setPassword} 
-            hint={''}  
+            setValue={setPassword}
+            hint={''}
             secureTextEntry={true}
-            
+
             value={password}/>
           </View>
           <View
             style={{
-              marginTop: SIZES.base,  
+              marginTop: SIZES.base,
               flexDirection: 'row',
               justifyContent: 'flex-end'
             }}>
@@ -123,7 +122,7 @@ export const Login:FC <{navigation: any}>= ({navigation}) => {
           </View>
 
           <View style ={{flexDirection: 'row', marginVertical: SIZES.padding}}>
-            <ParagraphText 
+            <ParagraphText
               style={{color: COLORS.white}}
               message={"Don't have an account? "}
             />

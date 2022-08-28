@@ -1,9 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SetStateAction, useContext } from "react";
 import Snackbar from "react-native-snackbar";
 import { COLORS, user } from "../../../constants";
-import { AuthContext } from "../../../services/context";
-import { dataService } from '../../../services/data.service';
+
 import { httpService } from '../../../services/http.service';
 
 
@@ -20,7 +17,7 @@ export const handleLogin = async (email: string ,password: string, setIsLoading:
         setIsLoading(true)
       const res = await  httpService.post(path, body)
         if (res.data.success) {
-          setIsLoading(false)           
+          setIsLoading(false)
           SignIn(res.data.token,res.data.user)
 
       // await AsyncStorage.multiSet([
@@ -40,7 +37,7 @@ export const handleLogin = async (email: string ,password: string, setIsLoading:
       Snackbar.show({
         text: "Fill All Fields",
         duration: 6000,
-        backgroundColor: 'red', 
+        backgroundColor: 'red',
         textColor: COLORS.white
     })
     }

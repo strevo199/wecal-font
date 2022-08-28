@@ -7,8 +7,6 @@ import SplashScreen from 'react-native-splash-screen';
 import { AuthContext } from './src/services/context';
 import { Splash } from './src/screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNRestart from 'react-native-restart';
-
 
 
 const App = () => {
@@ -35,11 +33,11 @@ const App = () => {
           isLoading: false
         };
       case 'LOGOUT':
-        
+
         return {
           ...prevState,
-          // user: null,
-          // userToken: null,
+          user: null,
+          userToken: null,
           isLoading: false
         };
       case 'REGISTER':
@@ -49,7 +47,7 @@ const App = () => {
           user:action.user,
           isLoading: false
         };
-        
+
     }
   }
 
@@ -57,36 +55,38 @@ const App = () => {
 
 
   const authContent = useMemo(() => ({
-    SignIn: async (token: any,user: any) => {    
-       
+    SignIn: async (token: any,user: any) => {
+
       await AsyncStorage.multiSet([
       ['token', token],
       ['user', JSON.stringify(user)]
 
-      ])      
+      ])
       dispatch({type: 'LOGIN', user: user, token: token})
     },
 
     SignOut: async () => {
       try {
         await AsyncStorage.clear(c => {
+          console.log('----73', c)
           if (c == null) {
-             dispatch({type: 'LOGOUT'})    
-             RNRestart.Restart()
-                  
+          console.log('----75', c)
+             dispatch({type: 'LOGOUT'})
+             // RNRestart.Restart()
+
           }
-          
-        }); 
+
+        });
     } catch (error) {
         console.log(error);
-        
+
     }
     },user: loginState.user,
 
     Activate: (token: any,user: any) => {
       dispatch({type: 'REGISTER', token: token,user: user})
     }
-  }), []) 
+  }), [])
 
 
 
@@ -96,13 +96,13 @@ const App = () => {
       SplashScreen.hide();
       dispatch({type: 'RETRIEVE_TOKEN', token: dataService.authToken()})
            }, 1000);
-    
-  }, [loginState.isLoading])  
 
-  
+  }, [loginState.isLoading])
+
+
     if (loginState.isLoading) {
        return <Splash/>
-    }
+    } 
     return (
     <AuthContext.Provider value = {authContent}>
         {loginState.userToken !== null ?  <MainNavScreen/>:

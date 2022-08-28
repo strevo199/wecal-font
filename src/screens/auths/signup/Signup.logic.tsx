@@ -7,8 +7,6 @@ import { COLORS } from "../../../constants/theme";
 import Snackbar from "react-native-snackbar";
 
   
-
-  
   export const handleSignup= async (firstName: string, email: string, password: string,setisLoading: Dispatch<SetStateAction<boolean>>,navigation:any, school: string,course_of_study: string, phoneNumber: string) => {
     setisLoading(true)
     if (password && firstName && email  && school && course_of_study && phoneNumber) {
