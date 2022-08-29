@@ -149,11 +149,11 @@ export const MainNavScreen = () => {
   }), [userState])
 
 
+
   return (
     <UserContext.Provider value={userContext}>
       <NavigationContainer>
           <Stack.Navigator>
-
             <Stack.Screen
                 options={{headerShown: false}}
               name = "Home" component={HomeTab} />

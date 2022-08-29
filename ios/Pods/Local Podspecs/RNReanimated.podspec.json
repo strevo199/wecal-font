@@ -1,6 +1,6 @@
 {
   "name": "RNReanimated",
-  "version": "2.2.4",
+  "version": "2.10.0",
   "summary": "More powerful alternative to Animated library for React Native.",
   "description": "RNReanimated",
   "homepage": "https://github.com/software-mansion/react-native-reanimated",
@@ -14,7 +14,7 @@
   },
   "source": {
     "git": "https://github.com/software-mansion/react-native-reanimated.git",
-    "tag": "2.2.4"
+    "tag": "2.10.0"
   },
   "source_files": [
     "ios/**/*.{mm,h,m}",
@@ -36,13 +36,10 @@
   },
   "requires_arc": true,
   "dependencies": {
-    "React": [
+    "React-Core": [
 
     ],
-    "FBLazyVector": [
-
-    ],
-    "FBReactNativeSpec": [
+    "RCT-Folly": [
 
     ],
     "RCTRequired": [
@@ -51,7 +48,13 @@
     "RCTTypeSafety": [
 
     ],
-    "React-Core": [
+    "ReactCommon/turbomodule/core": [
+
+    ],
+    "FBLazyVector": [
+
+    ],
+    "FBReactNativeSpec": [
 
     ],
     "React-CoreModules": [
@@ -81,9 +84,6 @@
     "React-RCTText": [
 
     ],
-    "React-RCTVibration": [
-
-    ],
     "React-RCTImage": [
 
     ],
@@ -102,9 +102,6 @@
     "React-jsinspector": [
 
     ],
-    "ReactCommon/turbomodule/core": [
-
-    ],
     "Yoga": [
 
     ],
@@ -115,9 +112,6 @@
 
     ],
     "React-callinvoker": [
-
-    ],
-    "RCT-Folly": [
 
     ]
   }

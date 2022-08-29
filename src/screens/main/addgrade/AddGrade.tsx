@@ -12,6 +12,7 @@ import { dataService } from '../../../services/data.service';
 import { httpService } from '../../../services/http.service';
 import Snackbar from 'react-native-snackbar';
 import { UserContext } from '../../../services/context';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 
 export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
@@ -96,40 +97,40 @@ export const AddGrade:FC <{navigation:any}>= ({navigation}) => {
    }
   }, [user])
   
-
-  
-  
   return (
-    <Fragment>
+    <Animated.View style ={{flex:1}} entering={FadeIn.randomDelay().delay(500)}>
       <StatusBar barStyle={'light-content'} />
-      <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
-        <TextInputField multiline={false} placeholder={'Enter course code. e.g CHM302'} style={{borderWidth:0.6}} setValue={setcourseCode} hint={'Enter Course Code'} secureTextEntry={false} value={courseCode}/>
+      <View style ={{flex:1,marginTop: SIZES.h1}}>
+        <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
+          <TextInputField multiline={false} placeholder={'Enter course code. e.g CHM302'} style={{borderWidth:0.6}} setValue={setcourseCode} hint={'Enter Course Code'} secureTextEntry={false} value={courseCode}/>
+        </View>
+        <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
+          <TextInputField multiline={false} placeholder={'Enter course title. e.g Quantum Machincs'} style={{borderWidth:0.6}} setValue={setcourseTitle} hint={'Enter Course Title:'} secureTextEntry={false} value={courseTitle}/>
+        </View>
+        <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
+          <TextInputField multiline={false} placeholder={'Enter credit unit'} style={{borderWidth:0.6}} setValue={setcourseUnit} hint={'Enter credit unit'} secureTextEntry={false} value={courseUnit}/>
+        </View>
+        <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
+          <Dropdown placeholderLabel={'select your Grade'} itemList={grades? grades : []} getValue={setgrade} hint={'select your Grade e.g B'}/>
+        </View>
+        <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
+          <Dropdown placeholderLabel={'select seamester'} itemList={seamesters ? seamesters: []} getValue={setSeamester} hint={'select course seamester '}/>
+        </View>
+
       </View>
-      <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
-        <TextInputField multiline={false} placeholder={'Enter course title. e.g Quantum Machincs'} style={{borderWidth:0.6}} setValue={setcourseTitle} hint={'Enter Course Title:'} secureTextEntry={false} value={courseTitle}/>
-      </View>
-      <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
-        <TextInputField multiline={false} placeholder={'Enter credit unit'} style={{borderWidth:0.6}} setValue={setcourseUnit} hint={'Enter credit unit'} secureTextEntry={false} value={courseUnit}/>
-      </View>
-      <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
-        <Dropdown placeholderLabel={'select your Grade'} itemList={grades? grades : []} getValue={setgrade} hint={'select your Grade e.g B'}/>
-      </View>
-      <View style = {{marginHorizontal:SIZES.padding,marginTop: SIZES.padding2}}>
-        <Dropdown placeholderLabel={'select seamester'} itemList={seamesters ? seamesters: []} getValue={setSeamester} hint={'select course seamester '}/>
-      </View>
-      <View style ={{marginHorizontal: SIZES.padding, marginTop: SIZES.padding, alignItems: 'flex-end'}}>
+      <View style ={{ position: 'absolute',bottom:"13%"}}>
           {
             isLoading ?
-            <View style ={{flexDirection: 'row',borderRadius: SIZES.padding, backgroundColor: COLORS.lightBlue, padding: SIZES.padding}}>
+            <View style ={{marginHorizontal: SIZES.padding,flexDirection: 'row',borderRadius: SIZES.padding, backgroundColor: COLORS.lightBlue, padding: SIZES.padding}}>
               <ActivityIndicator color= {COLORS.primary} />
               <Text style ={{...FONTS.h4, color: COLORS.darkPrimary, marginLeft: SIZES.padding}}>Loading...</Text>
             </View>
             : 
-            <ActionButton title={'Send'} handleAction={handleSendGrade} style={{backgroundColor: COLORS.primary, width: SIZES.width/3}}/>
-            
+
+            <ActionButton title={'Send'} handleAction={handleSendGrade} style={{backgroundColor: COLORS.primary, width: SIZES.width, position:'absolute'}}/>
           } 
       </View>
-    </Fragment>
+    </Animated.View>
   )
 }
 

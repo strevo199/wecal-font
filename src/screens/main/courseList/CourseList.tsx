@@ -6,6 +6,7 @@ import { httpService } from '../../../services/http.service';
 import { ParagraphText } from '../../../components/ParaText';
 import { DisplayCourseCard } from '../../../components/DisplayCourseCard';
 import { UserContext } from '../../../services/context';
+import Animated from 'react-native-reanimated';
 
 
 
@@ -23,7 +24,7 @@ export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,
 
   const renderCourseList = () => {
     return (
-      <View style ={{marginHorizontal: SIZES.padding, flex:1}}>
+      <Animated.View style ={{marginHorizontal: SIZES.padding, flex:1}}>
         <FlatList
           data={courses}
           keyExtractor = {item => `item-${item._id}`}
@@ -33,7 +34,7 @@ export const CourseList:FC <{toggleSearch:any,navigation: any}>= ({toggleSearch,
               <ActionButton title={'Add'} handleAction={() => navigation.navigate("AddGrade")} style= {{width: SIZES.width/4, alignSelf: 'flex-end', marginTop: SIZES.largeTitle, backgroundColor: COLORS.primary,padding: SIZES.padding2,borderTopLeftRadius:SIZES.padding2, borderBottomLeftRadius: SIZES.padding2}}/>
         </View>
 
-      </View>
+      </Animated.View>
     )
   } 
   return (

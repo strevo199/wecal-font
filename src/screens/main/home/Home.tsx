@@ -7,6 +7,7 @@ import moment, { MomentInput } from 'moment';
 import { Splash } from '../../auths';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../../../services/context';
+import Animated,{BounceIn, FadeIn} from 'react-native-reanimated';
 
 
 export const Home:FC <{navigation:any}>= ({navigation}) => {
@@ -34,6 +35,8 @@ useEffect(() => {
 
 useEffect(() => {
     LoadUserSchool();
+    console.log('userSchool---------',userSchool);
+    
     LoadCourses();
 }, [])
 
@@ -103,29 +106,31 @@ const renderAddGrade =() => {
   }   
   const quickActionCards  = (count: number, content: string, icon: ImageSourcePropType | undefined,color: string) => {
     return (
-      <TouchableOpacity
-        onPress={() =>       navigation.navigate("GradeCourse",{grade:content})
-      }
-      >
-      <ImageBackground
-        source={icon} 
-        resizeMode ='cover'
-        style ={{
-          width: SIZES.width/2.5,
-          height: SIZES.width/2.5,
-          marginLeft: SIZES.padding,
-          justifyContent: 'flex-end'
-        }}
-        imageStyle= {{
-          borderRadius: SIZES.padding2,
-        }} 
-      >
-          <View style ={{padding: SIZES.padding}}>
-            <Text style= {{...FONTS.h3, color: color}}>Total number of {content}</Text>
-            <Text style= {{...FONTS.h1, color: color}}>{count}</Text>
-          </View>
-      </ImageBackground> 
-      </TouchableOpacity>
+      <Animated.View entering={BounceIn.delay(500)}>
+        <TouchableOpacity
+          onPress={() =>       navigation.navigate("GradeCourse",{grade:content})
+        }
+        >
+        <ImageBackground
+          source={icon} 
+          resizeMode ='cover'
+          style ={{
+            width: SIZES.width/2.5,
+            height: SIZES.width/2.5,
+            marginLeft: SIZES.padding,
+            justifyContent: 'flex-end'
+          }}
+          imageStyle= {{
+            borderRadius: SIZES.padding2,
+          }} 
+        >
+            <View style ={{padding: SIZES.padding}}>
+              <Text style= {{...FONTS.h3, color: color}}>Total number of {content}</Text>
+              <Text style= {{...FONTS.h1, color: color}}>{count}</Text>
+            </View>
+        </ImageBackground> 
+        </TouchableOpacity>
+      </Animated.View>
     ) 
   }   
 
@@ -139,7 +144,7 @@ const renderAddGrade =() => {
            
             <FlatList
                 ListHeaderComponent={RenderHeaderComponent}
-                ListFooterComponent ={<View style ={{marginBottom: 60}}></View>}
+                ListFooterComponent ={<View style ={{marginBottom: 130}}></View>}
                 showsVerticalScrollIndicator ={false}
                 data={userSchool.gradecounts && userSchool?.gradecounts}
                 keyExtractor = {item => `item-${item.index}`}
@@ -148,7 +153,7 @@ const renderAddGrade =() => {
                     marginHorizontal: SIZES.padding
                 }} 
                 columnWrapperStyle={{
-                    justifyContent: 'space-between',
+                    justifyContent: 'space-between', 
                     marginVertical: SIZES.padding
                 }}
                 renderItem ={({item}) => quickActionCards(item.markCount, item.mark,rec2,COLORS.primary)}
@@ -205,13 +210,13 @@ const renderAddGrade =() => {
 
 
   return (
-    <Fragment>
+    <Animated.View entering={FadeIn.duration(700)}>
           <StatusBar backgroundColor={COLORS.primary} barStyle={ Platform.OS === 'android'? 'light-content': 'dark-content'} />
           <SafeAreaView>
               {renderhomeHeader()}
               {renderSummary()} 
           </SafeAreaView> 
-    </Fragment>
+    </Animated.View>
   )
 }
 

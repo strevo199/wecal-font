@@ -8,7 +8,7 @@ export const ActionButton:React.FC <{title: any,handleAction:any, style:any}>= (
   return (
     <TouchableOpacity
         onPress={handleAction}
-        style ={[style,{borderRadius: SIZES.padding-5, height: 40, justifyContent: 'center', alignItems: 'center'}]}
+        style ={[style,{ height: 40, justifyContent: 'center', alignItems: 'center'}]}
     >
         <Text style ={[{textTransform:'uppercase', ...FONTS.h3, color: COLORS.white}]}>{title}</Text>
     </TouchableOpacity>

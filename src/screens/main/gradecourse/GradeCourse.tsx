@@ -7,7 +7,8 @@ import { ParagraphText } from '../../../components/ParaText';
 import { useIsFocused } from '@react-navigation/native';
 import { DisplayCourseCard } from '../../../components/DisplayCourseCard';
 import { UserContext } from '../../../services/context';
-
+import Animated, { FadeIn } from 'react-native-reanimated';
+// react-native-reanimated": "2.2.4",
 
 
 export const GradeCourse:FC <{toggleSearch:any,navigation: any, route: any}>= ({toggleSearch,navigation, route}) => {
@@ -38,8 +39,9 @@ export const GradeCourse:FC <{toggleSearch:any,navigation: any, route: any}>= ({
       </View>
     )
   } 
+  
   return (
-    <Fragment>
+    <Animated.View  style ={{flex: 1}} entering={FadeIn.duration(500)}>
       <StatusBar barStyle={'light-content'} />
       {
          !isLoading ?
@@ -61,7 +63,7 @@ export const GradeCourse:FC <{toggleSearch:any,navigation: any, route: any}>= ({
         </View>
 
       }
-    </Fragment>
+    </Animated.View>
   )
 }
 
